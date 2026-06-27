@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2M Athletics — Youth Flag Football Database</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#1a1a2e;min-height:100vh}
+/* HEADER */
+header{background:linear-gradient(135deg,#0a1628 0%,#1a2d5a 100%);color:#fff;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
+header h1{font-size:1.2rem;font-weight:700;letter-spacing:0.5px}
+header h1 span{color:#f5a623}
+.header-stats{display:flex;gap:24px;font-size:0.75rem;opacity:0.8}
+.header-stats strong{color:#f5a623}
+/* BREADCRUMB */
+.breadcrumb{background:#fff;border-bottom:1px solid #e2e8f0;padding:12px 32px;display:flex;align-items:center;gap:8px;font-size:0.8rem;color:#64748b}
+.breadcrumb a{color:#3b82f6;text-decoration:none;cursor:pointer;font-weight:500}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb span{color:#94a3b8}
+/* MAIN */
+main{max-width:1400px;margin:0 auto;padding:28px 32px}
+/* SEARCH / FILTER BAR */
+.toolbar{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+.toolbar input{flex:1;min-width:240px;padding:10px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:0.875rem;outline:none;background:#fff}
+.toolbar input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,0.1)}
+.filter-btn{padding:9px 16px;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:0.8rem;cursor:pointer;font-weight:500;white-space:nowrap;transition:all 0.15s}
+.filter-btn:hover,.filter-btn.active{background:#0a1628;color:#fff;border-color:#0a1628}
+.filter-btn.fp.active{background:#dc2626;border-color:#dc2626}
+.filter-btn.np.active{background:#16a34a;border-color:#16a34a}
+/* SECTION HEADER */
+.section-title{font-size:0.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#94a3b8;margin-bottom:12px;margin-top:28px}
+.section-title:first-child{margin-top:0}
+/* LEAGUE CARDS GRID */
+.league-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.league-card{background:#fff;border-radius:12px;padding:20px;cursor:pointer;border:2px solid transparent;transition:all 0.18s;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+.league-card:hover{border-color:#3b82f6;box-shadow:0 4px 20px rgba(59,130,246,0.15);transform:translateY(-1px)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.card-name{font-size:0.95rem;font-weight:700;line-height:1.3;flex:1;padding-right:8px}
+.badge{font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.badge.fp{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+.badge.np{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+.badge.mixed{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe}
+.card-meta{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap}
+.meta-item{font-size:0.75rem;color:#64748b}
+.meta-item strong{color:#1a1a2e;font-weight:600}
+.card-revenue{font-size:0.8rem;font-weight:700;color:#f5a623;margin-top:8px}
+.card-footer{margin-top:12px;padding-top:12px;border-top:1px solid #f1f5f9;display:flex;gap:6px;flex-wrap:wrap}
+.state-pill{font-size:0.68rem;background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:10px;font-weight:500}
+.state-pill.more{background:#e0e7ff;color:#3730a3}
+/* STATE GRID */
+.state-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.state-card{background:#fff;border-radius:10px;padding:16px;cursor:pointer;border:2px solid transparent;transition:all 0.15s;box-shadow:0 1px 4px rgba(0,0,0,0.07);text-align:center}
+.state-card:hover{border-color:#f5a623;box-shadow:0 4px 16px rgba(245,166,35,0.2);transform:translateY(-1px)}
+.state-card .state-name{font-size:0.95rem;font-weight:700;margin-bottom:4px}
+.state-card .state-count{font-size:0.75rem;color:#64748b}
+/* TEAM CARDS */
+.team-list{display:flex;flex-direction:column;gap:16px}
+.team-card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid #3b82f6}
+.team-card.fp{border-left-color:#dc2626}
+.team-card.np{border-left-color:#16a34a}
+.team-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;gap:12px}
+.team-card-name{font-size:1.1rem;font-weight:700}
+.team-card-name a{color:#1a1a2e;text-decoration:none}
+.team-card-name a:hover{color:#3b82f6;text-decoration:underline}
+.team-badges{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+.gender-badge{font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:20px;background:#f8f4ff;color:#7c3aed;border:1px solid #ddd6fe}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px 24px;margin-bottom:16px}
+.team-field label{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#94a3b8;display:block;margin-bottom:2px}
+.team-field span{font-size:0.82rem;color:#1a1a2e;font-weight:500}
+.team-field span.na{color:#cbd5e1;font-style:italic}
+.team-social{display:flex;gap:10px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #f1f5f9;align-items:center}
+.social-link{display:inline-flex;align-items:center;gap:5px;font-size:0.75rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;transition:opacity 0.15s}
+.social-link:hover{opacity:0.8}
+.social-link.ig{background:#fce7f3;color:#be185d}
+.social-link.fb{background:#eff6ff;color:#1d4ed8}
+.social-link.tw{background:#f0f9ff;color:#0369a1}
+.social-link.web{background:#f0fdf4;color:#15803d}
+.revenue-row{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-top:12px;font-size:0.78rem}
+.revenue-row strong{color:#b45309}
+.revenue-row span{color:#92400e}
+/* BACK BUTTON */
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:#fff;border:1px solid #d1d5db;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;color:#374151;margin-bottom:20px;transition:all 0.15s}
+.back-btn:hover{background:#f9fafb;border-color:#9ca3af}
+/* LEAGUE DETAIL HEADER */
+.league-detail-header{background:#fff;border-radius:12px;padding:24px;margin-bottom:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+.ldh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.ldh-name{font-size:1.4rem;font-weight:800}
+.ldh-meta{display:flex;gap:20px;margin-top:12px;flex-wrap:wrap}
+.ldh-meta-item{font-size:0.8rem;color:#64748b}
+.ldh-meta-item strong{color:#1a1a2e;font-size:0.9rem}
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty h3{font-size:1.1rem;margin-bottom:8px;color:#64748b}
+/* RESPONSIVE */
+@media(max-width:640px){
+  main{padding:16px}
+  header{padding:0 16px}
+  header h1{font-size:1rem}
+  .header-stats{display:none}
+  .breadcrumb{padding:10px 16px}
+  .league-grid{grid-template-columns:1fr}
+  .state-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>2M <span>Athletics</span> — Youth Flag Football</h1>
+  <div class="header-stats">
+    <div><strong>161</strong> Organizations</div>
+    <div><strong>50</strong> States</div>
+    <div><strong>$500M+</strong> Est. Market</div>
+  </div>
+</header>
+
+<div class="breadcrumb" id="breadcrumb">
+  <a onclick="goHome()">All Leagues</a>
+</div>
+
+<main id="main"></main>
+
+<script>
+// ── RAW DATA ──────────────────────────────────────────────────────────────────
+const RAW = [
+["FOR-PROFIT","Co-ed","i9 Sports","National","Nationwide (250+ franchise locations)","2003","5000000+ total registrations (all sports)","https://www.i9sports.com","@i9sports","18500","i9 Sports","45000","@i9sports","Brian Sanders","CEO","info@i9sports.com","813-287-8370","$150000000","Franchise fees ($50-77K/unit) x 250 locations + ~$120/player registration; 5M total multi-sport registrations"],
+["FOR-PROFIT","Co-ed","Unrivaled Sports / Unrivaled Flag","National","Nationwide (27+ states)","2024 (flag div.)","45000+ (Under the Lights alone)","https://unrivaledflag.com","@unrivaledsports","12000","Unrivaled Sports","8500","@UnrivaledSports","Josh Harris / David Blitzer","Co-Owners","info@unrivaledsports.com","N/A","$45000000","170+ local leagues + Disney World Championships (1000 teams) + Under Armour + DICK'S Sporting Goods investment"],
+["FOR-PROFIT","Co-ed","Under the Lights Flag Football (Unrivaled)","National","27 states","2015","35000+","https://www.uaflag.com","@underthelightsflag","8796","Under the Lights Flag Football","N/A","","Matt Raab","Executive Director","info@uaflag.com","N/A","$12000000","~$40 net per athlete x 35000 players + tournament fees + Under Armour presenting sponsor"],
+["FOR-PROFIT","Co-ed","Football N America / FNA (Drew Brees)","CA/LA/TX","California + Louisiana + Texas","2017","N/A (24 leagues)","https://playfna.com","@footballnamerica","4200","Football N America","3100","","Drew Brees / Chris Stuart","Co-Founders","info@playfna.com","N/A","$3500000","24 leagues x avg 200 players x $75 registration; acquired by Unrivaled Sports Oct 2025"],
+["FOR-PROFIT","Co-ed","Next Level Flag Football","15 states","Bay Area CA + 14 states (100+ locations)","2010","N/A","https://www.nextlevelsports.com","@nextlevelrecsports","363","Next Level Sports","N/A","@nextlevel_flag","N/A","Director","N/A","N/A","$8000000","100+ locations x avg 300 players x ~$100 registration + camp revenue; 15th official season 2027"],
+["FOR-PROFIT","Co-ed","National Flag Football (NFF)","12 states","110 cities across 12 states","2006","N/A","https://www.nationalflagfootball.com","@nationalflagfootball","2100","National Flag Football","3700","","N/A","Director","N/A","N/A","$5000000","110 cities x avg 150 players x $95 registration + tournament fees (Battle Orlando 175 teams 25 states)"],
+["FOR-PROFIT","Co-ed","N Zone Sports","National","50+ US cities","2001","N/A","https://nzonesports.com","@nzonesports","1800","N Zone Sports","4200","","N/A","Franchise Support","N/A","N/A","$6000000","50+ franchise locations x ~$75K avg annual revenue per location"],
+["FOR-PROFIT","Co-ed","Gridiron Football (G Series)","National","Nationwide tournaments (McKinney TX HQ)","2022","1400+ per tournament","https://gridironfb.com","@gridironfootball","5600","Gridiron Football","4100","","N/A","Director","info@gridironfb.com","N/A","$2500000","Tournament entry fees ~$500/team x 100+ teams per event x multiple events; 21 divisions"],
+["FOR-PROFIT","Co-ed","American Flag Football League (AFFL)","National","Nationwide (Boston MA hub)","2017","5000+ youth (MA alone)","https://affl.com","@affl","8900","American Flag Football League","6200","@affl","N/A","Commissioner","info@affl.com","N/A","$4000000","Registration + pro franchise sales (Dallas/Boston/Las Vegas) + sponsorships; pro league launching 2026"],
+["FOR-PROFIT","Co-ed","7v7 Unlimited","National","Nationwide","N/A","N/A","https://www.7v7unlimited.com","@7v7unlimited","3200","7v7 Unlimited","1800","","N/A","Director","info@7v7unlimited.com","N/A","$1500000","Tournament fees + NFLPA strategic partnership revenue; Sandlot Pro-Am event"],
+["FOR-PROFIT","Co-ed","RCX Sports (NFL FLAG operator)","National","All 50 states (1800+ leagues)","2014","830000+","https://nflflag.com","@nflflag","87000","NFL FLAG","142000","@NFLFLAG","N/A","CEO","N/A","N/A","$85000000","League operator fees + Toyota/Gatorade/Jersey Mikes/Franklin sponsorships + tournament revenue + licensing; Sixth Street/Ariel/Blue Pool investors (2026)"],
+["FOR-PROFIT","Co-ed","St. Louis Flag Football / Elite Football Academy","MO","St. Louis metro MO","N/A","N/A","https://stlflagfootball.com","@elitefootballacademy","13000","Elite Football Academy","N/A","","N/A","Director","info@stlflagfootball.com","N/A","$1200000","Youth leagues + skills training + summer camps; St. Louis metro; instructional + competitive + indoor HS leagues"],
+["FOR-PROFIT","Co-ed","Wishbone Sports","CA","Livermore / Union City / San Ramon Bay Area CA","2023","N/A (100+ coaches)","https://wishbonesports.com","@wishbonesports","1200","Wishbone Sports","800","","Jared Muela","CEO/Co-Founder","jared@wishbonesports.com","N/A","$800000","New org (2023); K-8 programs; former 49ers Senior Director of Community Impact"],
+["FOR-PROFIT","Co-ed","East Bay NFL Flag","CA","Oakland + Alameda CA","2013","N/A","https://www.eastbaynflflag.com","@eastbaynflflag","890","East Bay NFL Flag","1200","","Peter Ferioli","Executive Director / Owner","peter@eastbaynflflag.com","N/A","$600000","Thousands of athletes served since 2013; ~$120/player; Bay Area"],
+["FOR-PROFIT","Co-ed","NorCal Flag Football","CA","Bay Area (9 cities) CA","N/A","2000+ kids; 240+ teams","https://www.norcalflagfootball.org","@norcalflagfootball","1400","NorCal Flag Football","2100","","Robert Foster","Director","director@norcalflagfootball.org","408-459-7022","$480000","240 teams x ~10 players avg x $100 registration = $240K x 2 seasons"],
+["FOR-PROFIT","Co-ed","NFL FLAG SoCal","CA","Los Angeles County / South Bay CA","N/A","N/A","https://nflflagsocal.com","@nflflagsocal","2300","NFL FLAG SoCal","1800","","N/A","Director","info@nflflagsocal.com","N/A","$900000","Large SoCal market; ages 4-HS; est. ~3000 players x $120/player"],
+["FOR-PROFIT","Co-ed","NFL Flag Football Inland Empire","CA","Beaumont / Fontana / Moreno Valley CA","N/A","N/A","https://www.nflflagie.com","@nflflagie","780","NFL Flag IE","650","","N/A","Director","info@nflflagie.com","N/A","$360000","3 locations x ~1000 players x $120/player (spring + fall seasons)"],
+["FOR-PROFIT","Co-ed","NFL Flag San Diego","CA","San Diego CA","N/A","N/A","https://www.nflflagsd.com","@nflflagsd","1100","NFL Flag San Diego","920","","N/A","Director","info@nflflagsd.com","N/A","$480000","Est. ~2000 players x $120/player (2 seasons); nonprofit self-describes"],
+["FOR-PROFIT","Co-ed","CALFLAG","CA","Statewide California","N/A","N/A","https://calflag.com","@calflag","2800","CALFLAG","2100","","N/A","Director","info@calflag.com","N/A","$1200000","Tiered league system (OIA elite tier) + Golden State Games + tournament revenue"],
+["FOR-PROFIT","Co-ed","SV5 NFL Flag Football","CA","San Francisco Bay Area CA","N/A","N/A","https://www.sv5nflflag.com","@sv5nflflag","560","SV5 NFL Flag","480","","N/A","Director","info@sv5nflflag.com","N/A","$270000","12-game season $225/player x ~600 players; 49ers Prep champion girls flag"],
+["FOR-PROFIT","Co-ed","Core 5 Flag Football","AZ","Peoria / Anthem / Cave Creek / Scottsdale AZ","2016","N/A","https://core5ff.com","@core5flagfootball","1889","CORE 5 Flag Football","N/A","","Joseph Longo","Founder/Director","N/A","N/A","$350000","Multi-location AZ; NFL FLAG licensed; founded by Joseph and Ruth Longo; est. ~1500 players x $120/player"],
+["FOR-PROFIT","Co-ed","AZ Youth Flag Football Brigade","AZ","Scottsdale / Paradise Valley / North Phoenix AZ","N/A","N/A","https://www.azfootballbrigade.com","@thebrigadeaz","2229","AZ Youth Football Brigade","N/A","","Marino Lee","Owner/Director (also Head Flag Football Coach at OUAZ)","N/A","N/A","$300000","NFL FLAG licensed; est. ~1200 players x $125/player; Head Coach Barrett Flynn (8U Brigade)"],
+["FOR-PROFIT","Co-ed","AZ Turf Warz","AZ","Show Low + Phoenix AZ","N/A","N/A","https://www.azturfwarz.com","@azturfwarz","N/A","Arizona Turf Wars","N/A","","Coach Withers","Head Coach","N/A","N/A","$180000","Multi-location AZ; est. ~750 players x $120/player"],
+["FOR-PROFIT","Co-ed","Club Sports Alaska","AK","Anchorage / Southcentral AK","N/A","N/A","https://www.clubsportsalaska.com","@clubsportsalaska","324","Club Sports Alaska","N/A","","N/A","Director","N/A","N/A","$120000","Ages 5-14; Tues/Thurs 7v7 outdoor; est. ~500 players x $120/player"],
+["FOR-PROFIT","Co-ed","Alaska Elite Flag Football League","AK","Alaska (statewide)","2025","N/A","https://alaskaeliteflagffl.com","N/A","N/A","Alaska Elite Flag Football League","N/A","","N/A","Director","N/A","N/A","$75000","New LLC (Jan 31 2025); est. ~300 players x $125/player"],
+["FOR-PROFIT","Co-ed","Missouri Wolverines Youth Football","MO","Kansas City MO","1998","N/A","https://www.missouriwolverines.com","@missouriwolverines","1155","Missouri Wolverines","N/A","","N/A","Director","N/A","N/A","$500000","26 years; K-8; tackle + flag; est. ~2000 players x $125/player"],
+["FOR-PROFIT","Co-ed","Kansas City NFL FLAG (Sporting KC venue)","MO/KS","Kansas City MO (Central Bank Sporting Complex)","N/A","N/A","https://www.kcflagfootball.com","@kcnflflagfootball","1218","KC NFL Flag Football","N/A","","N/A","Director","N/A","N/A","$720000","Central Bank Sporting Complex; est. ~3000 players x $120/player"],
+["FOR-PROFIT","Co-ed","Red Zone Youth Football","Multi-state","New England + California + Arizona (regional)","N/A","N/A","https://redzonecamp.com","@redzoneyouthfootball","N/A","Red Zone Youth Football","N/A","","N/A","Director","N/A","N/A","$800000","Multi-region camps + tournament teams + leagues; won NFL 10U Flag Football Championship"],
+["FOR-PROFIT","Co-ed","Blue Chip Youth Sports","Multi-state","Lexington KY + Bozeman MT + other locations","N/A","N/A","https://www.bluechipyouthsports.com","@bluechipyouthsports","N/A","Blue Chip Youth Sports","N/A","","N/A","Director","N/A","N/A","$400000","Multi-location; flag + tackle; est. ~1600 players x $125/player"],
+["FOR-PROFIT","Co-ed","Skyhawks Sports","National","Western MT + Nationwide (HQ: Spokane WA)","1979","N/A","https://skyhawks.com","@skyhawks_sports","3200","Skyhawks Sports","8900","@SkyhawksSports","N/A","Director","N/A","N/A","$15000000","National camp/clinic operator; flag football one of many sports; 45+ years; locations across all 50 states"],
+["FOR-PROFIT","Co-ed","Midwest Flag Football","MN/Midwest","Mankato + Scott County MN + Midwest","N/A","N/A","https://midwestflagfootball.com","@mff_leagues_tourneys","515","Midwest Flag Football","N/A","","N/A","Director","N/A","N/A","$300000","Regional MN/Midwest; est. ~1200 players x $125/player"],
+["FOR-PROFIT","Co-ed","Metro Boston NFL Flag / Metro Boston Sports Group","MA","Newton/Natick/Arlington/Belmont/Watertown/Woburn MA","N/A","N/A","https://www.metrobostonsportsgroup.com","@metrobostonnflflag","N/A","Metro Boston Sports Group","N/A","","N/A","Director","info@metrobostonsportsgroup.com","N/A","$600000","Select teams + recreational leagues; multiple age divisions; South Shore Stormers team"],
+["FOR-PROFIT","Co-ed","DeSoto Youth Sports Leagues (DYSL)","MS","Southaven/Horn Lake/Olive Branch/Hernando MS","N/A","N/A","https://dyslflagfootball.sportngin.com","@desotochiefsyouthsports","N/A","DeSoto Youth Sports Leagues","N/A","","N/A","Director","desotoyouthsports38671@gmail.com","662-345-3030","$180000","NFL FLAG + 7v7 competitive; est. ~750 players x $120/player; military/first responder discounts"],
+["FOR-PROFIT","Co-ed","Mo-Kan NFL FLAG","MO/KS","Kansas City + St. Louis + surrounding MO/KS","N/A","N/A","https://www.mokannflflag.com","@mokannflflag","708","Mo-Kan NFL FLAG","1679","","N/A","Director","N/A","N/A","$840000","Multiple MO/KS cities; PreK-8; spring/summer/fall seasons; est. ~3500 players x $120/player"],
+["FOR-PROFIT","Co-ed","Dakota Domination","SD","Sioux Falls SD","N/A","N/A","https://www.dakotadomination.com","@dakotadomination","N/A","Dakota Domination","N/A","","N/A","Director","N/A","N/A","$150000","Competitive youth football; est. ~600 players x $125/player"],
+["FOR-PROFIT","Co-ed","NW Vegas Flag","NV","Northwest Las Vegas NV","N/A","N/A","https://www.nwvegasflag.com","@nwvegasflag","799","NW Vegas Flag","147","","N/A","Director","N/A","N/A","$120000","Ages 5-12; NFL Flag affiliated; est. ~500 players x $120/player"],
+["FOR-PROFIT","Co-ed","New Jersey Flag Football League","NJ","Statewide NJ","N/A","N/A","https://www.njflag.com","@njflag","3567","NJ Flag Football","2900","","N/A","Director","N/A","N/A","$600000","Ages 3-14; est. ~2500 players x $120/player"],
+["FOR-PROFIT","Co-ed","Spring Hill NFL Flag Football League","FL","Spring Hill FL","2017","N/A","https://www.springhillnflflagfootball.com","@shnflflag","1328","Spring Hill NFL Flag Football","4600","","Andrew Sitar","Owner/Commissioner (LLC)","N/A","N/A","$240000","For-profit LLC (FL SunBiz); ages 3-17; Andrew + Falishia + Lana Sitar leadership"],
+["FOR-PROFIT","Co-ed","GoodSports USA / Monmouth County Flag","NJ","Wall / Monmouth County NJ","N/A","N/A","https://www.goodsportsusa.com/football","N/A","N/A","GoodSports USA","N/A","","Connor Heil","League Director","cheil@goodsportsusa.com","N/A","$360000","Sports facility operator (for-profit); est. ~1500 players x $120/player"],
+["FOR-PROFIT","Co-ed","NFL Flag NJ Morris County","NJ","Morris County NJ","2014","N/A","https://www.nflflagnj.com","@nflflagnj","170","NFL Flag NJ","695","","Brian Bowers","Founder (also Delbarton School head coach 25 yrs)","N/A","N/A","$360000","Co-founders Brian + Melanie Bowers; Lee Blum Asst Dir (former Lehigh RB); est. ~1500 players x $120/player"],
+["FOR-PROFIT","Co-ed","Next Gen Flag Football Illinois","IL","South Suburbs Chicago IL","2020","1000+ athletes","https://www.nextgenflagfootball.net","@nextgennflflag","2813","NextGenNFLFlag","72","","Vizzi Brothers","Founders","N/A","N/A","$240000","Est. ~1000 players x $120/player; South suburbs Chicago; Official NFL FLAG partner"],
+["FOR-PROFIT","Co-ed","SWYFT Flag","WI","Milwaukee / Oak Creek WI","N/A","N/A","https://www.swyftflag.com","@swyft_co","346","SWYFT Flag","N/A","","N/A","Director","N/A","N/A","$120000","8-week spring season; 5v5 co-ed; 8U team qualified for NFL FLAG Championship at Pro Football HOF"],
+["FOR-PROFIT","Co-ed","SYC Flag Football (Springfield Youth Club)","VA","Springfield / Northern Virginia VA","N/A","N/A","https://www.sycva.com/flagfootball","@syc_flagfootball","277","SYC Flag Football","N/A","","N/A","Director","N/A","N/A","$300000","One of most competitive youth flag leagues in N. Virginia; ages 3-16"],
+["FOR-PROFIT","Co-ed","406 Youth Sports Association","MT","Great Falls MT","2025","N/A","https://www.406youthsports.com","N/A","N/A","406 Youth Sports Association","N/A","","George Fontanez","Director","N/A","N/A","$60000","New org Spring 2025; private for-profit (two families); NFL Flag + youth sports; est. ~250 players"],
+["NONPROFIT","Co-ed","NFL FLAG (via NFL Foundation / RCX Sports)","National","All 50 states (1800+ leagues)","1999","830000+","https://nflflag.com","@nflflag","87000","NFL FLAG","142000","@NFLFLAG","N/A","Program Director","info@nflflag.com","N/A","$85000000","NFL Foundation + Toyota/Gatorade/Jersey Mikes/Franklin + tournament fees + in-school program grants; Sixth Street/Ariel investors"],
+["NONPROFIT","Co-ed","Pop Warner Little Scholars","National","All 50 states","1929","425000+","https://www.popwarner.com","@popwarnerfootball","28000","Pop Warner Little Scholars","62000","@PopWarner","Jon Butler","Executive Director","info@popwarner.com","215-752-2691","$18000000","Membership dues + licensing + championships revenue + sponsorships; 2.0 GPA requirement; 501c3"],
+["NONPROFIT","Co-ed","American Youth Football (AYF)","National","All 50 states + international","1996","500000+; 30000+ teams","https://www.americanyouthfootball.com","@americanyouthfootball","4200","American Youth Football","9800","@AYFofficial","N/A","Executive Director","info@americanyouthfootball.com","305-261-7172","$8000000","501c3; membership fees + grants + NFL/Nike/FieldTurf partnerships + national championship events"],
+["NONPROFIT","Co-ed","USA Football","National","Nationwide (NGB)","2002","N/A (governing body)","https://www.usafootball.com","@usafootball","45000","USA Football","68000","@USAFootball","Scott Hallenbeck","Executive Director","info@usafootball.com","317-570-4700","$12000000","USOPC funding + coaching certification fees + tournament revenue + grant programs + i9 Sports partnership; certified NGB April 2025"],
+["NONPROFIT","Co-ed","USA FLAG (Flag Football World Championship Tour)","National","Nationwide + international","2015","N/A","https://usaflag.org","@usaflag","12000","USA FLAG","8500","@USAFlag","N/A","Executive Director","info@usaflag.org","N/A","$3000000","10+ tour stop entry fees + sponsorships + national championship (Orlando Jan) + worlds (Arlington TX May)"],
+["NONPROFIT","Co-ed","YMCA of the USA (flag football programs)","National","Nationwide (hundreds of branches)","1851","N/A (millions across all sports)","https://www.ymca.org","@ymca","185000","YMCA","2100000","@YMCA","N/A","Various Branch Directors","N/A","N/A","$7000000","Registration fees (~$80-150/player) across hundreds of YMCA branches nationally; subsidized by membership dues"],
+["NONPROFIT","Co-ed","National Association of Police Athletic Leagues (PAL)","National","300+ chapters nationwide","1914","N/A (300+ chapters)","https://nationalpal.org","@nationalpal","4800","National PAL","12000","@NationalPAL","N/A","Executive Director","info@nationalpal.org","954-745-5815","$2500000","Chapter dues + grant funding + law enforcement partnerships"],
+["NONPROFIT","Co-ed","Boys & Girls Clubs of America (flag programs)","National","Nationwide","1860","N/A (millions across all programs)","https://www.bgca.org","@bgca_clubs","89000","Boys & Girls Clubs of America","1400000","@BGCA_Clubs","Jim Clark","President/CEO","info@bgca.org","404-487-5700","$1500000","Federal grants + NFL Foundation partnership + corporate sponsorships for flag football programs"],
+["NONPROFIT","Co-ed","Hoover Youth Flag Football","AL","Hoover AL","N/A","N/A","https://www.hooveralabama.gov/568/Youth-Flag-Football","@hooverflagfootball","605","Hoover BUCS Youth Football & Cheer","701","","Chuck Kramer / Coach Williams / Coach Sparks","Various Head Coaches","N/A","N/A","$120000","Municipal Parks & Rec; est. ~500 players x $120/player + city subsidy"],
+["NONPROFIT","Co-ed","Oak Mountain Youth Football Club (OMYFC)","AL","Birmingham area AL","N/A","N/A","https://omyfc.com","@omyfc","N/A","Oak Mountain Youth Football and Cheerleading","N/A","","N/A","Director","N/A","N/A","$120000","501c3; K-3 flag + tackle; Aug-Oct season; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","NFL FLAG Alabama","AL","Multiple locations statewide AL","N/A","N/A","https://www.nflflagalabama.com","@nflflagalabama","N/A","NFL FLAG Alabama","940","","N/A","Director","N/A","N/A","$360000","ARPA partnership (Alabama Recreation and Parks Association nonprofit); est. ~1500 players x $120/player"],
+["NONPROFIT","Co-ed","Athens Youth Flag Football","AL","Athens AL","N/A","N/A","https://www.athensalabama.us/386/Youth-Flag-Football","@athensyouthfootball","91","Athens Youth Football And Cheer","N/A","","N/A","Director","N/A","N/A","$72000","Ages 5-12; NFL FLAG licensed; est. ~300 players x $120/player"],
+["NONPROFIT","Co-ed","Juneau Youth Football League (JYFL)","AK","Juneau AK","1978","N/A","https://www.juneaufootball.com","N/A","N/A","Juneau Youth Football League","N/A","","N/A","Director","juneauyouthfootball@gmail.com","N/A","$48000","501c3 (EIN 92-0079212) since 1981; K-2 flag entry level; late July-end Sept; est. ~200 players x $120/player"],
+["NONPROFIT","Co-ed","Fairbanks Youth Football And Cheer (FYFC)","AK","Fairbanks AK","N/A","N/A","https://www.fairbanksyouthfc.org","@fairbanksyouthfc","25","AKFYFC","N/A","","N/A","Director","N/A","N/A","$60000","501c3; spring flag program; est. ~250 players x $120/player"],
+["NONPROFIT","Co-ed","NLR Wildcats Youth Football","AR","North Little Rock AR","2006","N/A","https://nlrwildcats.org","@wildcatsyouthfootball","2485","NLR Wildcats Youth Football","N/A","","Bernard Bracely","President","N/A","501-541-9125","$240000","501c3; ages 4-12; flag + tackle; est. ~1000 players x $120/player"],
+["NONPROFIT","Co-ed","North Little Rock PAL Flag Football","AR","North Little Rock AR","1998","N/A","https://nlrpal.com","N/A","N/A","North Little Rock PAL","N/A","","N/A","Director","N/A","N/A","$72000","501c3 (EIN 71-0808574); ages 4-9; est. ~300 players x $120/player"],
+["NONPROFIT","Co-ed","Life CHAMPS Little Rock","AR","Little Rock AR","N/A","N/A","https://lifechamps.org","N/A","N/A","Life CHAMPS Youth Sports","N/A","@LifeChampsLR","Steve Snider","Founder","N/A","N/A","$120000","501c3; ages 5-12; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","Colorado NFL FLAG","CO","Denver metro (14 cities) CO","N/A","N/A","https://www.coloradonflflag.com","@coloradonflflag","301","Colorado NFL FLAG","640","","N/A","Director","N/A","N/A","$1200000","Largest co-ed Youth NFL Flag Org in country claim; 14 locations; est. ~5000 players x $120/player"],
+["NONPROFIT","Co-ed","Broncos Flag Football","CO","Lakewood CO (Denver metro)","N/A","N/A","https://www.broncosflagfootball.com","@broncosflagfootball","N/A","Broncos Flag Football","N/A","","N/A","Director","info@broncosflagfootball.com","720-360-1600","$360000","NFL Broncos partnership; ages 5-12; est. ~1500 players x $120/player"],
+["NONPROFIT","Co-ed","Littleton Youth Sports","CO","Littleton CO","2012","N/A","https://www.littletonyouthsports.org","@littleton_youth_football","18","Littleton Youth Sports","244","","N/A","Director","N/A","N/A","$180000","501c3 (EIN 84-1383419); merged Panthers & Patriots youth orgs 2012; est. ~750 players x $120/player"],
+["NONPROFIT","Co-ed","Connecticut Flag Football League (CT FLAG)","CT","Windsor/Bloomfield/Glastonbury/Hebron/Portland CT","2018","~400 kids","https://www.ctflagfootball.com","@ct_flag","9577","CT FLAG","4300","@CTFlagFootball","Brandon Jubrey","Founder/President","info@ctflagfootball.com","860-263-9259","$96000","501c3; 400 kids x $120/player; CT Elite (boys travel) + CT Lady Matrix (girls travel)"],
+["NONPROFIT","Co-ed","Fairfield County Football League (FCFL)","CT","Bridgeport/Darien/Fairfield/Norwalk/Stamford CT","N/A","N/A","https://www.fairfieldcountyfootball.org","N/A","N/A","Fairfield County Football League","N/A","","Carmen Roda","Board Chairman","N/A","N/A","$600000","10 member orgs; PreK-8; NFL FLAG; est. ~2500 players x $120/player"],
+["NONPROFIT","Co-ed","Northeast Flag Football League","CT/NY","Greenwich + Stamford CT + Westchester NY","2016","N/A","https://www.northeastflagfootballleague.com","N/A","N/A","Northeast Flag Football (multiple chapters)","1000 combined","","N/A","Director","N/A","N/A","$240000","501c3 (EIN 81-3822536); ages 4-15; co-ed + girls-only; est. ~1000 players x $120/player"],
+["NONPROFIT","Co-ed","Greenwich Youth Football League (GYFL)","CT","Greenwich CT","N/A (40+ yrs)","N/A","https://www.greenwichyouthfootball.org","@gyflgreenwichyouthfb","339","GYFL Greenwich Football","95","","N/A","Director","N/A","N/A","$240000","501c3 (EIN 22-3076990); 40+ years operating; est. ~1000 players x $120/player"],
+["NONPROFIT","Co-ed","Wilmington Delaware NFL Flag Football","DE","Wilmington DE","N/A","N/A","https://www.denflflag.com","@denflflag","N/A","Wilmington DE NFL Flag","560","","N/A","Director","N/A","N/A","$120000","Ages 5-15; NFL FLAG licensed; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","Smyrna NFL Flag","DE","Smyrna DE","N/A","N/A","https://www.nflflagsmyrnade.com","@smyrnanflflag","384","Smyrna Delaware NFL Flag","751","","Jason Pitts","Head Girls Flag Football Coach","N/A","N/A","$120000","Est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","Brandywine Warriors Flag Football","DE","Brandywine area DE","1963","N/A","https://brandywinewarriors.org","@bw_warriors302","N/A","Brandywine Warriors Football and Cheerleading","1800","@BWWarriors302","N/A","Director","N/A","N/A","$180000","501c3 (EIN 51-0186092) since 1976; est. ~750 players x $120/player; 60+ years operating"],
+["NONPROFIT","Co-ed","Jaguars Youth Flag Football League","FL","Jacksonville FL","N/A","N/A","https://www.jaguarsflag.com","@jaguarsyouthflagfootballleague","1242","Jaguars Youth Flag Football League","1088","","Marcus Pollard / Caelan Rhinehardt","Director of Player Engagement / Youth Football Coordinator","N/A","N/A","$480000","NFL Jaguars partnership; ages 8+; est. ~2000 players x $120/player"],
+["NONPROFIT","Co-ed","East Orlando Preds","FL","Orlando FL","N/A","N/A","https://eastorlandopreds.org","@eastorlandowolves","N/A","East Orlando Preds","1210","@EOJrPreds","N/A","Director","N/A","N/A","$120000","501c3; 2x AAU National Champions; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","Winter Park Flag Football","FL","Winter Park FL","N/A","N/A","https://www.winterparkflagfootball.com","@winterparkflagfootball","1317","Winter Park Flag Football","418","","Preston McGann","Founder/Coach","N/A","N/A","$120000","Est. ~500 players x $120/player; Florida Youth Athletics NFL FLAG partner"],
+["NONPROFIT","Co-ed","Tampa Bay BOLTS Flag Football","FL","Tampa / Clearwater FL","N/A","N/A","https://www.tampabaybolts.org","@boltsflagfootball","3517","BOLTS Flag Football","125","","N/A","Director","N/A","N/A","$240000","Multiple age groups 6U-16U; est. ~1000 players x $120/player"],
+["NONPROFIT","Co-ed","Premier Flag Football League (Bradenton-Sarasota)","FL","Bradenton / Sarasota FL","N/A","N/A","https://www.premiernflflag.com","@premiernflflagfootball","99","Premier NFL Flag","298","","N/A","Director","N/A","N/A","$360000","Official NFL FLAG partner; 6v6; ages 5-15; est. ~1500 players x $120/player"],
+["NONPROFIT","Co-ed","GHSA Girls Flag Football","GA","Georgia statewide (407 public + 56 private HS)","2020","N/A","https://www.ghsa.net/flag-football","@officialghsa","35000","Georgia High School Association","N/A","@OfficialGHSA","N/A","GHSA Director","N/A","N/A","$500000","501c3 (est. 1904); 4th state to sanction (2020); Atlanta Falcons + Arthur Blank Foundation partnership"],
+["NONPROFIT","Co-ed","Georgia Youth Football League (GYFL)","GA","Georgia statewide","2023","N/A (30+ teams 15+ orgs)","https://www.georgiayfl.org","@georgiayfl","5423","Georgia Youth Football League","N/A","","N/A","Director","N/A","N/A","$360000","Faith-based nonprofit; est. ~1500 players x $120/player"],
+["NONPROFIT","Co-ed","NFL FLAG Hawaii","HI","Hawaii statewide","N/A","2000+ active participants","https://nflflagfootballhawaii.com","@nflflagfootballhawaii","456","NFL Flag Football Hawaii","N/A","","N/A","Director","NFLFlagHawaii@hawaiiantel.net","N/A","$480000","GuideStar listed nonprofit; Toyota Hawaii sponsor; est. ~2000 players x $120/player"],
+["NONPROFIT","Co-ed","Friday Night Flag Idaho","ID","Boise/Meridian/Nampa/Caldwell/Pocatello/Idaho Falls ID","N/A","8000+ across ID+UT","https://www.fridaynightflag.com","@fridaynightflag_boisemeridian","259","Friday Night Flag","1297","","Reese Shurtliff / Brent Peterson / Matt Hagler","Regional League Directors","N/A","N/A","$960000","8000+ participants across Idaho + Utah; ~$120/player"],
+["NONPROFIT","Co-ed","Optimist Youth Football Boise","ID","Boise / Treasure Valley ID","1949","83000+ historical participants","https://optimistyouthfootball.com","@optimistyouthfootball","442","Optimist Youth Football","N/A","","N/A","Director","N/A","N/A","$480000","501c3; founded 1949 (75 yrs); volunteer-run; flag + tackle; Treasure Valley; est. ~2000 active players"],
+["NONPROFIT","Co-ed","Idaho Youth Football League (IYFL)","ID","Ada + Canyon County ID","N/A","N/A","https://idahoyouthfootballleague.com","N/A","N/A","IYFL","N/A","","N/A","Director","Info@idahoyouthfootballleague.com","N/A","$120000","501c3; AYF member; 5-on-5 flag; Garden City HQ; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","Meridian PAL Flag Football","ID","Meridian / Star / Eagle / Kuna / Boise ID","1996","6000+ youth (with 1000+ volunteers)","https://www.meridianpal.org","@meridian.pal","94","Meridian PAL","N/A","","N/A","Director","N/A","208-888-6030","$360000","501c3; 6000+ youth across all sports; ages 4-17; spring + fall seasons; est. ~1500 flag players x $120/player"],
+["NONPROFIT","Co-ed","Northern Illinois Youth Flag Football League (NIYFFL)","IL","Northern Illinois (Rockford area)","N/A","N/A","https://www.niyflagfootball.org","N/A","N/A","NIYFFL","N/A","","Bob Anderson / Melissa Mastros","League Directors","N/A","847-630-4848","$360000","Ages 6-14; spring + fall; Chicago Bears/Nike Rockford partnership; est. ~1500 players x $120/player"],
+["NONPROFIT","Co-ed","Chicagoland Youth Football League (TCYFL)","IL","Lake/Kane/DuPage/Cook/Will/McHenry counties IL","N/A","10000+ players; 2500 coaches","https://www.tcyfl.net","N/A","N/A","TCYFL","N/A","","Geoff Meyer","President","g5150m@msn.com","N/A","$3000000","Largest independent youth football league in US; 10000+ players x ~$120/player"],
+["NONPROFIT","Co-ed","Junior Football League of Central Illinois (JFLOCI)","IL","Peoria Heights IL","1967","N/A","https://www.jfloci.com","N/A","N/A","JFLOCI","2862","","Zo Evans","Executive Director","N/A","309-682-8910","$300000","501c3; founded 1967 (57 yrs); ages 5-14; flag + tackle + cheer; Peoria Heights IL"],
+["NONPROFIT","Co-ed","Indianapolis Colts Flag Football Network","IN","Indiana statewide","2023","N/A","https://www.colts.com/footballdevelopment/flag/flag-network","@colts","1000000","Indianapolis Colts","2018142","","N/A","NFL Team Director","N/A","N/A","$480000","NFL team partnership; 10+ NFL FLAG leagues statewide; ages 4-14; est. ~2000 players x $120/player"],
+["NONPROFIT","Co-ed","YMCA Greater Des Moines Flag Football","IA","Des Moines IA","2022","508+ registrants","http://m.dmymca.org/sports-activities/flag-football","@dmymca","3852","YMCA of Greater Des Moines","N/A","","N/A","Sports Director","N/A","N/A","$80000","508 players x $159/season; K-8; 7-game season June-August"],
+["NONPROFIT","Co-ed","NFL FLAG Wichita","KS","Wichita KS","N/A","N/A","https://www.wichita.gov/455/NFL-FLAG-Wichita","@wichitaflag","11000","City of Wichita Parks & Rec","N/A","","Mickey Lara","Coaching Contact","N/A","316-268-4123","$480000","Ages 4-17; City Parks & Rec municipal program; 6v6; est. ~2000 players x $120/player"],
+["NONPROFIT","Co-ed","YMCA Greater Kansas City Chiefs FLAG","KS/MO","Kansas City (Lawrence/Shawnee KS + MO counties)","N/A","N/A","https://kansascityymca.org/programs/youth-sports/chiefs","@ymcakansascity","3307","YMCA of Greater Kansas City","N/A","","N/A","Sports Director","N/A","N/A","$600000","KC Chiefs partnership; ages 5-12; Chiefs jerseys + KC Wolf appearances; est. ~2500 players x $120/player"],
+["NONPROFIT","Co-ed","Boys & Girls Clubs Greater KC Flag Football","KS/MO","Kansas City MO/KS","N/A","N/A","https://www.bgc-gkc.org/sports/flagfootball","@helpkckids","2206","helpKCkids","N/A","","Kary Kankey","Contact","kkankey@helpkckids.org","N/A","$120000","Ages 5-12; $25/player (subsidized); 8-game season; est. ~500 players x $25/player"],
+["NONPROFIT","Co-ed","The Gridiron C.R.I.B.","KY","Louisville KY + Southern Indiana","N/A","N/A","https://www.thegridironcrib.com","@thegridironcrib","N/A","The Gridiron CRIB","1800","","N/A","Director","N/A","N/A","$360000","501c3; ages 7U-17U; Colts Flag Football Network partner; est. ~1500 players x $120/player"],
+["NONPROFIT","Co-ed","YMCA Greater Louisville Flag Football","KY","Louisville KY","N/A","508+ registrants (recent yr)","https://www.ymcalouisville.org/programs/youth-sports/flag-football","@ymca_louisville","3361","YMCA Louisville","N/A","","N/A","Sports Director","N/A","N/A","$80000","501c3; ages 5-11; 508 players; est. ~508 players x $159/season"],
+["NONPROFIT","Co-ed","Fern Creek Optimist NFL Flag","KY","Louisville KY","1953","N/A","https://www.ferncreekoptimist.org","@fern.creek.optimist","58","Fern Creek Optimist Club","1273","","N/A","Director","N/A","N/A","$84000","501c3 since 1953; 5v5 non-contact; U6/U8/U10/U14; 8925 Smith Lane Louisville KY 40291"],
+["NONPROFIT","Co-ed","YMCA Central Kentucky","KY","Lexington / Frankfort KY","N/A","N/A","https://ymcacky.org","@ymcaofcentralkentucky","3692","YMCA of Central Kentucky","14989","","Kamren Young","Sports Contact","kyoung@ymcacky.org","859-367-7515","$240000","501c3; ages 4-14; 7 practices + 6 games; Sundays; co-ed NFL FLAG"],
+["NONPROFIT","Co-ed","Northern Kentucky Youth Football League (NKYFL)","KY","Boone/Kenton/Campbell/Gallatin/Pendleton/Grant counties KY","1958","N/A","https://www.nkyfl.net","N/A","N/A","NKYFL","6198","@NKYFL","N/A","Director","N/A","N/A","$720000","501c3 (EIN 23-7203080); since 1958 (66 yrs); 19 member orgs; Bellevue KY 41073"],
+["NONPROFIT","Co-ed","Southern Maryland Youth Flag Football League (SMYFFL)","MD","White Plains / Charles County MD","2005","1600+ athletes","https://www.smyffl.com","@smyffl","1114","SMYFFL","2825","@SMYFFL","Reggie Barksdale","Owner/Commissioner","N/A","N/A","$384000","2024 NFL FLAG League of the Year; ages 4-17; spring + fall seasons; 1600 athletes x ~$120/player"],
+["NONPROFIT","Co-ed","St. Mary's County Youth Sports NFL Flag","MD","St. Mary's County MD","2008","500+ kids","https://smcys.org","N/A","N/A","St. Mary's County Youth Sports","N/A","","N/A","Director","STMYFFL@gmail.com","N/A","$120000","500+ kids x $120/player; Elite League + All-Girls League available"],
+["NONPROFIT","Co-ed","NFL FLAG Baltimore Ravens","MD","Maryland statewide (5 locations)","N/A","N/A","https://www.baltimoreravens.com/fans/rise/nflflag/","@ravens","1900000","Baltimore Ravens","2200000","","N/A","Ravens Community Director","N/A","N/A","$480000","5 MD locations; ages 4-14; est. ~2000 players x $120/player"],
+["NONPROFIT","Co-ed","Newton Area Flag Football League (NAFFL)","MA","Newton MA","N/A","N/A","https://www.newtonareaflagfootball.com","@newtonflag","N/A","Newton Area Flag Football","N/A","","Jacob Groshek","Head Coach / Director","N/A","N/A","$240000","NFL FLAG nationals qualifier; multiple championship-level teams; est. ~1000 players x $120/player"],
+["NONPROFIT","Co-ed","Hill House Boston NFL Flag Football","MA","Boston (South End) MA","N/A","N/A","https://www.hillhouseboston.org","N/A","N/A","Hill House Boston","N/A","","N/A","Director","N/A","N/A","$120000","Scholarship program available; co-ed; Sept-Nov; Jan-Feb indoor; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","Western Mass Youth Flag Football","MA","Western Massachusetts","N/A","N/A","https://www.westernmassyouthflagfootball.com","@westernmassyouthflag","N/A","Western Mass Youth Flag Football","N/A","","N/A","Director","N/A","N/A","$180000","Ages 4-17; boys + girls; est. ~750 players x $120/player"],
+["NONPROFIT","Co-ed","Leominster NFL FLAG","MA","Leominster MA","N/A","N/A","https://www.leominsterflag.com","N/A","N/A","Leominster NFL FLAG","N/A","","N/A","Director","N/A","N/A","$120000","Est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","NFL FLAG Michigan","MI","Metro Detroit (23 locations) MI","N/A","N/A","https://www.michiganyouthflagfootball.com","@michiganyouthflagfootball","N/A","NFL FLAG Michigan","N/A","","N/A","Director","N/A","N/A","$1200000","Detroit Lions partner; 23 locations; est. ~5000 players x $120/player"],
+["NONPROFIT","Co-ed","Michigan Made Youth Flag Football","MI","Midland/Marysville/Pigeon/Port Austin MI","N/A","N/A","https://www.michiganmade.net/youthflag","@michiganmadeflagfootball","166","Michigan Made Football","N/A","","N/A","Director","N/A","N/A","$120000","All seasons; all skill levels; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","National Flag Football NFF Michigan","MI","Dearborn / Lansing / Romeo MI","2006","N/A","https://www.nationalflagfootball.com","@nationalflagfootball","2100","National Flag Football","3700","","N/A","Director","N/A","N/A","$360000","NFF Michigan locations; est. ~1500 players x $120/player"],
+["NONPROFIT","Co-ed","Minnesota Vikings Community Flag Football","MN","Twin Cities + statewide MN","2022","N/A (104 schools + community)","https://www.vikings.com/community/youth-football/nfl-flag/","@vikingsfootball","1500000","Minnesota Vikings","4500000","","N/A","Vikings Community Director","N/A","N/A","$600000","NFL team partnership; PreK-8 community + HS girls; est. ~2500 community players x $120/player"],
+["NONPROFIT","Co-ed","Mississippi Gulf Coast YMCA Flag Football","MS","Gulf Coast MS","N/A","N/A","https://www.mgcymca.org","N/A","N/A","MS Gulf Coast YMCA","N/A","","N/A","Youth Sports Director","N/A","N/A","$120000","NFL FLAG program; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","New Mexico Young America Football League (NMYAFL)","NM","Albuquerque (Bernalillo to Grants) NM","1966","3500+ annually","https://nmyafl.org","N/A","N/A","NMYAFL","703","","N/A","Director","N/A","N/A","$420000","501c3 (EIN 85-0206968); since 1966 (58 yrs); flag + tackle; spring + fall; 3500 players x ~$120/player"],
+["NONPROFIT","Co-ed","NFL Flag New Mexico","NM","Albuquerque NM (statewide)","2021","1300+ participants; 750+","https://www.nflflag-nm.com","@nflflag.nm","727","NFL Flag NM","N/A","","James Martinez","Head Coach / Director","N/A","N/A","$312000","2022 NFL FLAG Rookie Org of the Year; Co-coach: Tia Martinez (all-girls teams); 750+ players x ~$120/player"],
+["NONPROFIT","Co-ed","NYC Police Athletic League (PAL) Flag Football","NY","New York City NY","1914","20000+ youth annually (all sports)","https://palnyc.org/flag-football","@palnewyork","3710","PAL New York","4572","@PALNewYork","N/A","Director","N/A","N/A","$480000","NYC Jets partnership (since 2018); ages 9-14; Cops & Kids Flag Football program; 501c3"],
+["NONPROFIT","Co-ed","Downtown Giants Youth Sports","NY","New York City NY","N/A","1000+ youth","https://downtowngiants.com","@downtowngiantsnyc","1605","Downtown Giants NYC","N/A","","N/A","Director","N/A","N/A","$240000","501c3 (EIN 20-8429489); NY Giants NFL FLAG; est. ~1000 players x $120/player"],
+["NONPROFIT","Co-ed","Long Island Flag Football League (LIFFL)","NY","Long Island NY","1984","N/A","https://liffl.com","@long_island_flag_football","5471","LIFFL","N/A","","N/A","Director","N/A","N/A","$480000","First official flag football league (1984); 40+ years; est. ~2000 players x $120/player"],
+["NONPROFIT","Co-ed","Mad Dog NFL Flag Football (Westchester)","NY","Westchester County NY","N/A","N/A","https://www.maddognflflag.com","@maddognflflag","605","Mad Dog NFL Flag","N/A","","N/A","Director","N/A","N/A","$240000","Est. ~1000 players x $120/player; Westchester NY"],
+["NONPROFIT","Co-ed","Carolina United Flag Football Club","NC","Raleigh NC","N/A","N/A","https://cuflag.org","@carolinaunitedflag","N/A","Carolina United Flag Football","N/A","","N/A","Director","Info@cuflag.org","N/A","$240000","Nationally ranked Pro Women + 23U Select + 18U HS Girls teams; est. ~1000 players x $120/player"],
+["NONPROFIT","Co-ed","Triangle Flag Football League","NC","Raleigh NC + Triangle area","2018","N/A","https://triangleflag.com","@triangleflagfootball","N/A","Triangle Flag Football League","N/A","","N/A","Director","N/A","N/A","$480000","501c3; acquired by Unrivaled Sports (Josh Harris); est. ~2000 players x $120/player"],
+["NONPROFIT","Co-ed","Garner Sports League (GSL) Flag Football","NC","Garner NC","N/A","N/A","https://garnerfootball.com","N/A","N/A","GSL Football","N/A","","N/A","Director","N/A","N/A","$480000","501c3; volunteer-run; ages 3-18; est. ~2000 players x $120/player"],
+["NONPROFIT","Co-ed","Charlotte Premier Sports League","NC","Charlotte NC","N/A","N/A","https://www.charlottepremiersports.com","N/A","N/A","Charlotte Premier Sports","N/A","","N/A","Director","N/A","N/A","$480000","Rec + elite flag; ages 4-17; est. ~2000 players x $120/player"],
+["NONPROFIT","Co-ed","National Flag Football (NFF) Ohio","OH","Canton + statewide OH","2006","N/A","https://www.nationalflagfootball.com","@nationalflagfootball","2100","National Flag Football","3700","","N/A","Director","N/A","N/A","$600000","Pro Football Hall of Fame Summer Nationals; ages 6-17; 25 states + 3 countries; est. ~2500 players"],
+["NONPROFIT","Co-ed","Titans NFL FLAG","TN","Columbia/Goodlettsville/Kingston-Roane/Murfreesboro/South Nashville TN","N/A","2000+ kids","https://www.titansflagfootball.com","@titansflagfootball","N/A","Titans Flag Football","N/A","","N/A","Director","N/A","N/A","$480000","Tennessee Titans/RCX Sports; 5 locations; ages 4-14; 7-week season; Titans-branded jerseys"],
+["NONPROFIT","Co-ed","Murfreesboro Football League Flag Division","TN","Murfreesboro TN","N/A","N/A","https://www.murfreesborotn.gov/474/Flag-Football","N/A","N/A","Murfreesboro Flag Football","N/A","","N/A","Director","N/A","N/A","$240000","Longest-running youth football program in Murfreesboro; ages 5-13; est. ~1000 players x $120/player"],
+["NONPROFIT","Co-ed","South Dakota Junior Football (SDJRFB)","SD","Sioux Falls + Yankton SD","N/A","N/A","https://www.sdjrfb.com","N/A","N/A","SD Junior Football","N/A","","N/A","Director","N/A","N/A","$360000","Sanford Sports Complex (Sioux Falls) + Summit Football Complex (Yankton); K-8; flag + tackle"],
+["NONPROFIT","Co-ed","Siouxland YMCA NFL FLAG","SD","Sioux Falls SD","N/A","N/A","https://www.nwsymca.org/flag-football","N/A","N/A","Siouxland YMCA","N/A","","N/A","Director","N/A","N/A","$120000","K-9th grade; official NFL team jerseys; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","Spirit Football Omaha","NE","Omaha/Gretna/Papillion/LaVista/Ralston/Bellevue NE","1977","N/A","https://www.spirit-football.com","@spiritfootball_ne","N/A","Spirit Football","1213","","N/A","Director","N/A","402-807-3480","$600000","7X National Champion; 47+ years; NFL FLAG + competitive 7v7; ages 5-18; est. ~2500 players x $120/player"],
+["NONPROFIT","Co-ed","Millard United Sports","NE","Millard NE (Omaha metro)","2016","10000+ youth","https://www.millardunited.com","@millardunited","1397","Millard United Sports","N/A","@MillardUnited","Jenny Cuykendall / Russ Hendrix / Troy Streeter","Coaching Coordinator / Contacts","jcukendall@millardunited.com","N/A","$1200000","10000+ youth; merged 1940 + 1971 orgs; PreK-2 flag; NFL FLAG rules; est. 10000 multi-sport x ~$120/player"],
+["NONPROFIT","Co-ed","Gretna Youth Sports Foundation (GYSF)","NE","Gretna NE","N/A","784 participants; 54 teams","http://www.gretnayouthfootball.com","@gretnayouthfootball_gysf","211","Gretna Youth Sports Foundation","1500","","N/A","Director","N/A","N/A","$189000","501c3 (EIN 73-1638010); 54 teams ~14 players avg; flag + tackle + cheer"],
+["NONPROFIT","Co-ed","Vegas Sports Foundation / NFL FLAG Las Vegas","NV","Las Vegas NV","2018","N/A","https://www.vegasflag.com","@vegasflag","2361","Vegas Sports Foundation","3700","","N/A","Director","N/A","N/A","$480000","501c3; ages 5-14 youth + girls 5-17; est. ~2000 players x $120/player"],
+["NONPROFIT","Co-ed","New Hampshire Youth Football & Spirit Conference","NH","Statewide NH","N/A","4000+","https://www.nhyfsc.org","N/A","N/A","NHYFSC","2645","","N/A","Director","N/A","N/A","$480000","501c3; 4000+ boys and girls; flag + tackle + cheer; est. ~2000 flag players x $120/player"],
+["NONPROFIT","Co-ed","Bedford Bulldogs Youth Football","NH","Bedford NH","2017","N/A","https://bedfordbulldogs.org","@bhsfootballnh","670","Bedford Youth Football and Cheer Bulldogs","1227","@BHSBulldogs","N/A","Director","N/A","N/A","$120000","501c3 (Booster Club); ages 5-15; merged Bedford Jr Bulldogs + Jaguars Feb 2017; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","South Jersey NFL FLAG","NJ","Ocean County NJ","2011","N/A","https://www.sjnflfl.com","@sjnfl.flagfootball","1645","SJNFL Flag Football","N/A","@sjnflfl","N/A","Director","N/A","N/A","$360000","501c3; NFL FLAG 5-on-5; est. ~1500 players x $120/player"],
+["NONPROFIT","Co-ed","South Jersey Youth Flag Football (SJYFF)","NJ","Gloucester County NJ","N/A","N/A","https://sjyff.flagfootballnj.com","@sjnfl.flagfootball","1645","South Jersey Youth Flag Football","1500","","N/A","Director","sjyffofgc@gmail.com","856-796-2877","$600000","One of largest youth flag programs in NJ; est. ~2500 players x $120/player"],
+["NONPROFIT","Co-ed","Northern Virginia Youth Football League (NVYFL)","VA","Arlington/Fairfax/Loudoun/Prince William counties VA","1966","N/A","https://www.nvyfl.org","N/A","N/A","NVYFL","N/A","","N/A","Director","N/A","N/A","$1200000","One of largest independent youth football leagues; 17 programs; 1966 (58 yrs); est. ~5000 players x $120/player"],
+["NONPROFIT","Co-ed","Washington Commanders NFL FLAG","VA/DC/MD","DMV (DC/Virginia/Maryland)","N/A","N/A","https://www.commanders.com/youth-football/flag-football","N/A","N/A","Washington Commanders","N/A","","N/A","Commanders Community Director","N/A","N/A","$600000","$1M NFL donation; 127 girls flag programs across DMV; 2nd-9th grades; Flag Star Football partner"],
+["NONPROFIT","Co-ed","Seattle Seahawks Flag Football League","WA","Bellevue/Bothell/Kent/Renton/Sammamish/Seattle/Tacoma/Tri-Cities WA","N/A","N/A","https://www.seahawkflagfootball.com","@seahawksflag","2133","Seahawks Flag Football","391","","N/A","Seahawks Community Director","N/A","N/A","$960000","NFL Seahawks partnership; ages 4-14; 5v5; 8 WA locations; est. ~4000 players x $120/player"],
+["NONPROFIT","Co-ed","Green Bay Packers NFL FLAG / Girls League","WI","Green Bay + Racine/Kenosha/Whitefish Bay WI","N/A","52 teams at regional tournament","https://www.packers.com/community/football-outreach","@packers","N/A","Green Bay Packers","N/A","","N/A","Packers Community Director","N/A","N/A","$600000","NFL Packers; 5th year regional tournament 2026; $100K to 20 WI high schools; Girls inaugural HS league summer 2026"],
+["NONPROFIT","Co-ed","New Hampshire Flag Football League","NH","Statewide NH","N/A","N/A","https://www.nhffl.com","N/A","N/A","NH Flag Football League","N/A","","N/A","Director","N/A","N/A","$120000","Est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","YMCA Huntington Flag Football","WV","Huntington WV","N/A","N/A","N/A","N/A","N/A","YMCA Huntington","N/A","","Darian Shackelford","Youth Sports Contact","dshackelford@huntingtonymca.org","304-697-7113","$120000","NFL youth flag jersey included; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","Casper Junior Football League","WY","Casper WY","2014","N/A","https://www.casperjrfootball.com","N/A","N/A","Casper Junior Football League","1252","","N/A","Director","casperjrfootball@gmail.com","N/A","$120000","501c3 (2014); flag + tackle + cheer; est. ~500 players x $120/player"],
+["NONPROFIT","Co-ed","Cheyenne Youth Flag Football","WY","Cheyenne WY","N/A","N/A","https://www.cheyenneyouthflagfootball.org","N/A","N/A","Cheyenne Youth Flag Football","266","","N/A","Director","cheyenneflagfootball@gmx.com","307-217-4011","$72000","Character development focus; est. ~300 players x $120/player"],
+["NONPROFIT","Co-ed","Missoula Youth Football (MYF) Flag Division","MT","Missoula MT","N/A","168 flag players (2024)","https://www.missoulayouthfootball.org","@missoulayouthfootball","273","Missoula Youth Football","2400","","Nonie Cobb","Volunteer Coordinator","cobbn@ci.missoula.mt.us","N/A","$40000","501c3; 168 flag players (Grades 3-4) x $120/player; 2024 data"],
+["NONPROFIT","Co-ed","Billings YMCA NFL Flag Football","MT","Billings MT","1905 (YMCA)","135+ (Laurel area)","http://billingsymca.org","@billingsymca","N/A","Billings Family YMCA","7600","","N/A","Director","N/A","N/A","$60000","501c3; K-7 flag; 2nd-5th grade divisions; est. ~250 players x $120/player"],
+["NONPROFIT","Co-ed","Livingston Rec Falcons Youth Flag Football","MT","Livingston MT","N/A","N/A","https://www.livingstonmontana.org/rec/page/livingston-rec-falcons-youth-flag-football","N/A","N/A","Livingston Recreation Dept","1556","","Maggie Tarr","Recreation Director","N/A","406-223-2233","$36000","FREE league; NFL Falcons (Atlanta) partnership; Grades 1-6; 229 River Drive Livingston MT 59047; est. ~300 players"],
+["NONPROFIT","Co-ed","Next Level Flag Football Bozeman (Montana State)","MT","Bozeman MT (Montana State University)","N/A","N/A","https://www.nextlevelsports.com","@nextlevelrecsports","363","Next Level Sports","N/A","@nextlevel_flag","Jesse Mosser / Derek Griebel","MSU Asst Coaches / Program Leads","N/A","N/A","$60000","4th season at MSU; Bobcat Stadium venue; est. ~250 players x $120/player"],
+["NONPROFIT","Co-ed","Teamwork Sports Nebraska","NE","Omaha NE","N/A","N/A","https://www.teamworksportsne.com/flag-football","@teamworksportsne","194","Teamwork Sports","971","","N/A","Director","N/A","N/A","$120000","Ages 4-12; no cuts/tryouts; equal playing time; est. ~500 players x $120/player"],
+["NONPROFIT","Girls","Detroit Lions High School Girls Flag Football League","MI","Metro Detroit MI","2024","600+ girls","https://www.detroitlions.com","@detroitlions","N/A","Detroit Lions","N/A","","N/A","Lions Community Director","N/A","N/A","$180000","Second season 2025; 600+ girls; NFL + Lions Foundation funded; no player registration fee"],
+["NONPROFIT","Girls","Minnesota Vikings Girls Flag Football League","MN","Minnesota statewide (104 schools)","2024","N/A (104 schools)","https://www.vikings.com/community/youth-football/girls-flag/","@flag_football_mn_vikings","393","Vikings Flag Football League","N/A","","N/A","Vikings Community Director","N/A","N/A","$600000","NFL + Vikings Foundation; $600K+ investment; doubled to 104 schools 2026; no player fee; 5v5 format"],
+["NONPROFIT","Girls","Dallas Cowboys High School Girls Flag Football","TX","Dallas-Fort Worth TX (54 schools)","2023","N/A (54 DFW schools)","https://www.dallascowboys.com","@dallascowboys","N/A","Dallas Cowboys","N/A","","N/A","Cowboys Community Director","N/A","N/A","$300000","NFL Cowboys Foundation; 54 DFW area schools; no player fee"],
+["NONPROFIT","Girls","PSAL Girls Varsity Flag Football (NY Jets partnership)","NY","New York City NY","2011","N/A (~60 schools)","https://www.psal.org","@psal_nyc","N/A","PSAL NYC","N/A","","N/A","PSAL Director / Jets Partner","N/A","N/A","$240000","Grew from 31 to ~60 NYC public schools; NY Jets partnership (since 2018); created 2011 by PSAL + Jets"],
+["NONPROFIT","Girls","GHSA Girls Flag Football","GA","Georgia statewide (407 public + 56 private HS)","2020","N/A","https://www.ghsa.net/flag-football","@officialghsa","35000","Georgia High School Association","N/A","@OfficialGHSA","N/A","GHSA Director","N/A","N/A","$500000","501c3 (est. 1904); 4th state to sanction (2020); Atlanta Falcons + Arthur Blank Foundation"],
+["NONPROFIT","Girls","Connecticut Flag Football League CT Lady Matrix","CT","Connecticut statewide","2018","N/A","https://www.ctflagfootball.com","@ct_flag","9577","CT FLAG","4300","@CTFlagFootball","Jessica Nash","CT Elite President","ctflag@gmail.com","860-263-9259","$96000","Girls travel program; 8U/10U/12U/14U/HS; President: Brandon Jubrey"],
+["NONPROFIT","Girls","BHC Flag Football Maryland","MD","Maryland statewide","N/A","N/A","https://bhcyouth.com","@bhcyouth","N/A","BHC Youth","N/A","","N/A","Director","N/A","N/A","$240000","Maryland's Premier All-Girls Flag Football (Nike powered); est. ~1000 girls x $120/player"],
+["NONPROFIT","Girls","Louisville Girls Flag Football","KY","Louisville KY","N/A","N/A","https://www.louisvillekyflag.com","@loukygirlsflag","615","Louisville Girls Flag Football","N/A","","N/A","Director","N/A","N/A","$120000","Louisville's ONLY girls flag org; fastest-growing; est. ~500 girls x $120/player"],
+["NONPROFIT","Girls","New England Flag Football All-Girls","MA","Peabody / North Shore MA","N/A","N/A","https://www.newenglandflagfootball.com","N/A","N/A","New England Flag Football","N/A","","Christopher Lanning","Head Coach (Peabody HS)","N/A","N/A","$120000","All-girls Sat leagues (ages 12-15); Peabody 14U team qualified for NFL FLAG Nationals; est. ~500 girls"],
+["NONPROFIT","Girls","Fargo Park District Girls Flag Football (Vikings)","ND","Fargo + West Fargo + Moorhead ND","2025","N/A (first HS girls program in ND)","https://www.fargoparks.com","N/A","N/A","Fargo Parks District","N/A","","N/A","Park District Director","N/A","N/A","$60000","First official HS girls flag football program in ND; Minnesota Vikings sponsor; 8-week season"],
+["NONPROFIT","Girls","CIF Girls Flag Football (California statewide)","CA","California statewide","2021","N/A","https://www.cif.org","N/A","N/A","California Interscholastic Federation","N/A","","N/A","CIF Director","N/A","N/A","$1000000","CIF unanimously sanctioned varsity sport; all 3 CA NFL teams support; MaxPreps statewide coverage"],
+["NONPROFIT","Girls","Cali Queens SD","CA","Spring Valley/La Mesa/Lemon Grove/El Cajon CA","N/A","N/A","https://www.flagfootballfinder.com/organizations/cali-queens-sd","N/A","N/A","Cali Queens SD","N/A","","N/A","Director","N/A","N/A","$60000","All-girls; ages 8U-HS; San Diego area; est. ~250 girls x $120/player"],
+["NONPROFIT","Girls","Vanguard Elite FFC","CA","Oxnard CA (Southern California)","N/A","N/A","https://www.flagfootballfinder.com/flag-football-team/vanguard-elite-ffc","N/A","N/A","Vanguard Elite FFC","N/A","","N/A","Director","N/A","N/A","$60000","Girls flag; discipline/teamwork/leadership; est. ~250 girls x $120/player"],
+["NONPROFIT","Girls","Desert Reign Flag Football","NM","Albuquerque NM","N/A","N/A","https://www.flagfootballfinder.com/organizations/desert-reign-flag-football","N/A","N/A","Desert Reign Flag Football","N/A","","Eric Cerda","Coach/Director","N/A","N/A","$60000","All-girls + co-ed; middle school through HS; college scholarship earned by one player"],
+["NONPROFIT","Girls","Michigan Inclusive Flag Football League (MIFFL)","MI","Metro Detroit / Ferndale MI","N/A","N/A","https://miffl.org","@michiganinclusiveflagfootball","278","Michigan Inclusive FFL","N/A","","N/A","Director","N/A","N/A","$36000","LGBTQIA+ inclusive; Women+ division; nonprofit; est. ~150 players x $120/player"],
+["NONPROFIT","Girls","Long Island Rush Flag Football","NY","Long Island NY","N/A","N/A","N/A","N/A","N/A","Long Island Rush Flag Football","N/A","","N/A","Director","N/A","N/A","$60000","Girls-only travel program; Long Island NY; est. ~250 girls x $120/player"],
+["NONPROFIT","Girls","Carolina Panthers Challenger Flag Football","NC","Raleigh + Charlotte NC","N/A","N/A","https://www.panthers.com/community/challenger-flag-football-home","@panthers","N/A","Carolina Panthers","N/A","","Christen Winstead (Raleigh) / Hayley Scanlan + Hailey White (Charlotte)","Program Directors / Therapeutic Recreation Specialists","Christen.Winstead@raleighnc.gov","919-996-2111","$120000","NFL Panthers partnership; Raleigh + Mecklenburg County; girls + adaptive flag football"],
+];
+
+// ── FIELD INDICES ─────────────────────────────────────────────────────────────
+const F = {BT:0,GEN:1,NAME:2,STATE:3,CITY:4,FOUNDED:5,PLAYERS:6,WEB:7,IG:8,IGFOL:9,FB:10,FBFOL:11,TW:12,HEAD:13,TITLE:14,EMAIL:15,PHONE:16,REV:17,REVNOTE:18};
+
+// ── LEAGUE FAMILY DEFINITIONS ─────────────────────────────────────────────────
+const FAMILIES = [
+  {id:'nfl-flag',   name:'NFL FLAG Network',        names:['RCX Sports (NFL FLAG operator)','NFL FLAG (via NFL Foundation / RCX Sports)','NFL FLAG Alabama','NFL FLAG Hawaii','NFL FLAG Wichita','NFL Flag Football Inland Empire','NFL Flag New Mexico','NFL Flag NJ Morris County','NFL FLAG SoCal','NFL Flag San Diego','NFL FLAG Baltimore Ravens','NFL FLAG Michigan','East Bay NFL Flag','Spring Hill NFL Flag Football League','SV5 NFL Flag Football','NFL Flag New Mexico','Indianapolis Colts Flag Football Network','Jaguars Youth Flag Football League','Tampa Bay BOLTS Flag Football','Titans NFL FLAG','Minnesota Vikings Community Flag Football','Minnesota Vikings Girls Flag Football League','Detroit Lions High School Girls Flag Football League','Dallas Cowboys High School Girls Flag Football','PSAL Girls Varsity Flag Football (NY Jets partnership)','GHSA Girls Flag Football','Seattle Seahawks Flag Football League','Green Bay Packers NFL FLAG / Girls League','Washington Commanders NFL FLAG','Carolina Panthers Challenger Flag Football','Broncos Flag Football','Colorado NFL FLAG']},
+  {id:'i9',         name:'i9 Sports',               names:['i9 Sports']},
+  {id:'unrivaled',  name:'Unrivaled Sports',         names:['Unrivaled Sports / Unrivaled Flag','Under the Lights Flag Football (Unrivaled)','Football N America / FNA (Drew Brees)','Triangle Flag Football League']},
+  {id:'ymca',       name:'YMCA Programs',            names:['YMCA of the USA (flag football programs)','YMCA Greater Des Moines Flag Football','YMCA Greater Kansas City Chiefs FLAG','YMCA Greater Louisville Flag Football','YMCA Central Kentucky','Mississippi Gulf Coast YMCA Flag Football','YMCA Huntington Flag Football','Billings YMCA NFL Flag Football','Siouxland YMCA NFL FLAG']},
+  {id:'popwarner',  name:'Pop Warner',               names:['Pop Warner Little Scholars']},
+  {id:'usafootball',name:'USA Football',             names:['USA Football']},
+  {id:'ayf',        name:'American Youth Football (AYF)', names:['American Youth Football (AYF)']},
+  {id:'bgc',        name:'Boys & Girls Clubs',       names:['Boys & Girls Clubs of America (flag programs)','Boys & Girls Clubs Greater KC Flag Football']},
+  {id:'pal',        name:'National PAL',             names:['National Association of Police Athletic Leagues (PAL)','NYC Police Athletic League (PAL) Flag Football','North Little Rock PAL Flag Football','Meridian PAL Flag Football']},
+  {id:'usaflag',    name:'USA FLAG',                 names:['USA FLAG (Flag Football World Championship Tour)']},
+  {id:'nff',        name:'National Flag Football (NFF)', names:['National Flag Football (NFF)','National Flag Football NFF Michigan','National Flag Football (NFF) Ohio']},
+  {id:'nzone',      name:'N Zone Sports',            names:['N Zone Sports']},
+  {id:'skyhawks',   name:'Skyhawks Sports',          names:['Skyhawks Sports']},
+  {id:'affl',       name:'AFFL',                     names:['American Flag Football League (AFFL)']},
+  {id:'7v7',        name:'7v7 Unlimited',            names:['7v7 Unlimited']},
+  {id:'gridiron',   name:'Gridiron Football',        names:['Gridiron Football (G Series)']},
+  {id:'nextlevel',  name:'Next Level Flag Football', names:['Next Level Flag Football','Next Level Flag Football Bozeman (Montana State)']},
+  {id:'cif',        name:'CIF Girls Flag Football',  names:['CIF Girls Flag Football (California statewide)','Cali Queens SD','Vanguard Elite FFC']},
+  {id:'indep',      name:'Independent / Local',      names:[]},
+];
+
+// Build lookup: org name → family id
+const nameToFamily = {};
+FAMILIES.forEach(f => f.names.forEach(n => { nameToFamily[n] = f.id; }));
+
+// Tag each row
+const orgs = RAW.map(r => ({
+  bt: r[F.BT], gen: r[F.GEN], name: r[F.NAME], state: r[F.STATE],
+  city: r[F.CITY], founded: r[F.FOUNDED], players: r[F.PLAYERS],
+  web: r[F.WEB], ig: r[F.IG], igfol: r[F.IGFOL], fb: r[F.FB],
+  fbfol: r[F.FBFOL], tw: r[F.TW], head: r[F.HEAD], title: r[F.TITLE],
+  email: r[F.EMAIL], phone: r[F.PHONE], rev: r[F.REV], revnote: r[F.REVNOTE],
+  family: nameToFamily[r[F.NAME]] || 'indep'
+}));
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function fmtRev(s) {
+  if(!s||s==='N/A') return 'N/A';
+  const n = parseInt(s.replace(/[^0-9]/g,''));
+  if(isNaN(n)) return s;
+  if(n>=1000000) return '$'+(n/1000000).toFixed(n%1000000===0?0:1)+'M';
+  if(n>=1000) return '$'+(n/1000).toFixed(0)+'K';
+  return '$'+n;
+}
+function na(v){ return (!v||v==='N/A'||v==='')?null:v; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// Get unique states for a list of orgs
+function statesFor(orgs){
+  const map = {};
+  orgs.forEach(o => {
+    const ss = o.state.split('/');
+    ss.forEach(s => {
+      s = s.trim();
+      if(!map[s]) map[s]=[];
+      map[s].push(o);
+    });
+  });
+  return map;
+}
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let view = 'home'; // home | states | teams
+let currentFamily = null;
+let currentState = null;
+let searchQ = '';
+let filterBT = 'all';
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function goHome(){ view='home'; currentFamily=null; currentState=null; render(); }
+function goStates(familyId){ view='states'; currentFamily=FAMILIES.find(f=>f.id===familyId); currentState=null; render(); }
+function goTeams(state){ view='teams'; currentState=state; render(); }
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render(){
+  updateBreadcrumb();
+  if(view==='home') renderHome();
+  else if(view==='states') renderStates();
+  else if(view==='teams') renderTeams();
+}
+
+function updateBreadcrumb(){
+  const bc = document.getElementById('breadcrumb');
+  if(view==='home'){
+    bc.innerHTML = '<span>All Leagues</span>';
+  } else if(view==='states'){
+    bc.innerHTML = `<a onclick="goHome()">All Leagues</a><span>›</span><span>${esc(currentFamily.name)}</span>`;
+  } else {
+    bc.innerHTML = `<a onclick="goHome()">All Leagues</a><span>›</span><a onclick="goStates('${currentFamily.id}')">${esc(currentFamily.name)}</a><span>›</span><span>${esc(currentState)}</span>`;
+  }
+}
+
+function renderHome(){
+  const m = document.getElementById('main');
+  const q = searchQ.toLowerCase();
+
+  // Build family data
+  const familyData = FAMILIES.map(fam => {
+    let members;
+    if(fam.id==='indep'){
+      members = orgs.filter(o=>o.family==='indep');
+    } else {
+      members = orgs.filter(o=>o.family===fam.id);
+    }
+    if(!members.length) return null;
+
+    // Apply search
+    if(q && !fam.name.toLowerCase().includes(q) && !members.some(o=>o.name.toLowerCase().includes(q)||o.city.toLowerCase().includes(q)||o.state.toLowerCase().includes(q))){
+      return null;
+    }
+    // Apply BT filter
+    if(filterBT!=='all'){
+      const ft = filterBT==='fp'?'FOR-PROFIT':'NONPROFIT';
+      if(!members.some(o=>o.bt===ft)) return null;
+    }
+
+    // States
+    const stateMap = statesFor(members);
+    const states = Object.keys(stateMap).sort();
+
+    // Revenue sum
+    const revTotal = members.reduce((sum,o)=>{
+      const n=parseInt((o.rev||'').replace(/[^0-9]/g,''));
+      return sum+(isNaN(n)?0:n);
+    },0);
+
+    // Business type
+    const hasFP = members.some(o=>o.bt==='FOR-PROFIT');
+    const hasNP = members.some(o=>o.bt==='NONPROFIT');
+    const btClass = hasFP&&hasNP?'mixed':hasFP?'fp':'np';
+    const btLabel = hasFP&&hasNP?'For-Profit + Nonprofit':hasFP?'For-Profit':'Nonprofit';
+    const sortKey = hasFP?0:1;
+
+    return {fam, members, states, stateMap, revTotal, btClass, btLabel, sortKey};
+  }).filter(Boolean);
+
+  familyData.sort((a,b)=>a.sortKey-b.sortKey||a.fam.name.localeCompare(b.fam.name));
+
+  const fpItems = familyData.filter(d=>d.sortKey===0);
+  const npItems = familyData.filter(d=>d.sortKey===1);
+
+  let html = `
+    <div class="toolbar">
+      <input type="text" id="search" placeholder="🔍  Search leagues, states, cities…" value="${esc(searchQ)}" oninput="searchQ=this.value;render()">
+      <button class="filter-btn ${filterBT==='all'?'active':''}" onclick="filterBT='all';render()">All</button>
+      <button class="filter-btn fp ${filterBT==='fp'?'active':''}" onclick="filterBT='fp';render()">For-Profit</button>
+      <button class="filter-btn np ${filterBT==='np'?'active':''}" onclick="filterBT='np';render()">Nonprofit</button>
+    </div>`;
+
+  function renderCards(items, title){
+    if(!items.length) return '';
+    let s = `<div class="section-title">${title} (${items.length})</div><div class="league-grid">`;
+    items.forEach(({fam,members,states,revTotal,btClass,btLabel})=>{
+      const displayStates = states.slice(0,6);
+      const extra = states.length-6;
+      s += `<div class="league-card" onclick="goStates('${fam.id}')">
+        <div class="card-top">
+          <div class="card-name">${esc(fam.name)}</div>
+          <span class="badge ${btClass}">${btLabel}</span>
+        </div>
+        <div class="card-meta">
+          <div class="meta-item"><strong>${members.length}</strong> org${members.length>1?'s':''}</div>
+          <div class="meta-item"><strong>${states.length}</strong> state${states.length>1?'s':''}</div>
+        </div>
+        <div class="card-revenue">${fmtRev('$'+revTotal)}</div>
+        <div class="card-footer">
+          ${displayStates.map(s=>`<span class="state-pill">${esc(s)}</span>`).join('')}
+          ${extra>0?`<span class="state-pill more">+${extra} more</span>`:''}
+        </div>
+      </div>`;
+    });
+    s += '</div>';
+    return s;
+  }
+
+  html += renderCards(fpItems, '🔴 FOR-PROFIT Leagues');
+  html += renderCards(npItems, '🟢 NONPROFIT Leagues');
+
+  if(!fpItems.length && !npItems.length){
+    html += `<div class="empty"><h3>No results found</h3><p>Try a different search term or filter.</p></div>`;
+  }
+
+  m.innerHTML = html;
+}
+
+function renderStates(){
+  const m = document.getElementById('main');
+  const fam = currentFamily;
+  let members;
+  if(fam.id==='indep'){
+    members = orgs.filter(o=>o.family==='indep');
+  } else {
+    members = orgs.filter(o=>o.family===fam.id);
+  }
+
+  const stateMap = statesFor(members);
+  const states = Object.keys(stateMap).sort();
+
+  // Header info
+  const revTotal = members.reduce((sum,o)=>{const n=parseInt((o.rev||'').replace(/[^0-9]/g,''));return sum+(isNaN(n)?0:n);},0);
+  const hasFP = members.some(o=>o.bt==='FOR-PROFIT');
+  const hasNP = members.some(o=>o.bt==='NONPROFIT');
+  const btClass = hasFP&&hasNP?'mixed':hasFP?'fp':'np';
+  const btLabel = hasFP&&hasNP?'For-Profit + Nonprofit':hasFP?'For-Profit':'Nonprofit';
+
+  let html = `
+    <button class="back-btn" onclick="goHome()">← Back to All Leagues</button>
+    <div class="league-detail-header">
+      <div class="ldh-top">
+        <div class="ldh-name">${esc(fam.name)}</div>
+        <span class="badge ${btClass}">${btLabel}</span>
+      </div>
+      <div class="ldh-meta">
+        <div class="ldh-meta-item"><label>Organizations</label><strong>${members.length}</strong></div>
+        <div class="ldh-meta-item"><label>States</label><strong>${states.length}</strong></div>
+        <div class="ldh-meta-item"><label>Est. Total Revenue</label><strong style="color:#f5a623">${fmtRev('$'+revTotal)}</strong></div>
+      </div>
+    </div>
+    <div class="section-title">Select a State (${states.length})</div>
+    <div class="state-grid">`;
+
+  states.forEach(s=>{
+    const cnt = stateMap[s].length;
+    html += `<div class="state-card" onclick="goTeams('${esc(s)}')">
+      <div class="state-name">${esc(s)}</div>
+      <div class="state-count">${cnt} org${cnt>1?'s':''}</div>
+    </div>`;
+  });
+
+  html += '</div>';
+  m.innerHTML = html;
+}
+
+function renderTeams(){
+  const m = document.getElementById('main');
+  const fam = currentFamily;
+  let members;
+  if(fam.id==='indep'){
+    members = orgs.filter(o=>o.family==='indep');
+  } else {
+    members = orgs.filter(o=>o.family===fam.id);
+  }
+
+  // Filter to state
+  const stateOrgs = members.filter(o=>o.state.split('/').map(s=>s.trim()).includes(currentState));
+
+  let html = `<button class="back-btn" onclick="goStates('${fam.id}')">← Back to ${esc(fam.name)} States</button>
+    <div class="section-title">${esc(currentState)} — ${stateOrgs.length} Organization${stateOrgs.length>1?'s':''}</div>
+    <div class="team-list">`;
+
+  stateOrgs.forEach(o=>{
+    const btCls = o.bt==='FOR-PROFIT'?'fp':'np';
+    const nameHtml = na(o.web)?`<a href="${esc(o.web)}" target="_blank" rel="noopener">${esc(o.name)}</a>`:esc(o.name);
+
+    let social = '';
+    if(na(o.web)) social+=`<a class="social-link web" href="${esc(o.web)}" target="_blank">🌐 Website</a>`;
+    if(na(o.ig) && o.ig!=='N/A'){
+      const igUrl = 'https://instagram.com/'+o.ig.replace('@','');
+      const fol = na(o.igfol) && o.igfol!=='N/A' ? ` (${Number(o.igfol).toLocaleString()})` : '';
+      social+=`<a class="social-link ig" href="${igUrl}" target="_blank">📸 Instagram${fol}</a>`;
+    }
+    if(na(o.fb) && o.fb!=='N/A'){
+      const fol = na(o.fbfol) && o.fbfol!=='N/A' && !isNaN(parseInt(o.fbfol)) ? ` (${parseInt(o.fbfol).toLocaleString()})` : '';
+      social+=`<a class="social-link fb" href="https://facebook.com" target="_blank">📘 Facebook${fol}</a>`;
+    }
+    if(na(o.tw) && o.tw!=='N/A'){
+      social+=`<a class="social-link tw" href="https://twitter.com/${o.tw.replace('@','')}" target="_blank">𝕏 Twitter</a>`;
+    }
+
+    html += `<div class="team-card ${btCls}">
+      <div class="team-card-header">
+        <div class="team-card-name">${nameHtml}</div>
+        <div class="team-badges">
+          <span class="badge ${btCls}">${o.bt==='FOR-PROFIT'?'For-Profit':'Nonprofit'}</span>
+          ${o.gen==='Girls'?'<span class="gender-badge">Girls</span>':o.gen==='Co-ed'?'<span class="gender-badge" style="background:#f0fdf4;color:#15803d;border-color:#bbf7d0">Co-ed</span>':''}
+        </div>
+      </div>
+      <div class="team-grid">
+        <div class="team-field"><label>Location</label><span>${esc(o.city)||'<span class="na">N/A</span>'}</span></div>
+        <div class="team-field"><label>Founded</label><span>${na(o.founded)?esc(o.founded):'<span class=\'na\'>N/A</span>'}</span></div>
+        <div class="team-field"><label>Players</label><span>${na(o.players)?esc(o.players):'<span class=\'na\'>N/A</span>'}</span></div>
+        <div class="team-field"><label>Head</label><span>${na(o.head)?esc(o.head):'<span class=\'na\'>N/A</span>'}</span></div>
+        <div class="team-field"><label>Title</label><span>${na(o.title)?esc(o.title):'<span class=\'na\'>N/A</span>'}</span></div>
+        <div class="team-field"><label>Email</label><span>${na(o.email)?`<a href="mailto:${esc(o.email)}" style="color:#3b82f6">${esc(o.email)}</a>`:'<span class=\'na\'>N/A</span>'}</span></div>
+        <div class="team-field"><label>Phone</label><span>${na(o.phone)?`<a href="tel:${esc(o.phone)}" style="color:#3b82f6">${esc(o.phone)}</a>`:'<span class=\'na\'>N/A</span>'}</span></div>
+        <div class="team-field"><label>Est. Revenue</label><span style="font-weight:700;color:#b45309">${fmtRev(o.rev)}</span></div>
+      </div>
+      ${social?`<div class="team-social">${social}</div>`:''}
+      ${na(o.revnote)?`<div class="revenue-row"><strong>Revenue Notes: </strong><span>${esc(o.revnote)}</span></div>`:''}
+    </div>`;
+  });
+
+  html += '</div>';
+  m.innerHTML = html;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
