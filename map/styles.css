@@ -1,0 +1,210 @@
+/* ── Reset & tokens ──────────────────────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a1628;
+  --surface:#111e35;
+  --surface2:#162240;
+  --text:#e8edf5;
+  --muted:#8899bb;
+  --border:#1e3058;
+  --gold:#f5a623;
+  --panel-w:420px;
+  /* choropleth greens (sequential, single hue) */
+  --c0:#1e2d40;  /* 0 leagues */
+  --c1:#1a4a2e;  /* 1–2 */
+  --c2:#166534;  /* 3–5 */
+  --c3:#15803d;  /* 6–9 */
+  --c4:#16a34a;  /* 10+ */
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',system-ui,sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-shrink:0;
+  flex-wrap:wrap;
+}
+.header-brand{font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:.02em;white-space:nowrap}
+.header-sub{color:var(--muted);font-size:.8rem;white-space:nowrap}
+.header-actions{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn-ghost{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  font-size:.78rem;padding:5px 12px;border-radius:4px;cursor:pointer;
+  white-space:nowrap;transition:all .15s;
+}
+.btn-ghost:hover,.btn-ghost.active{
+  border-color:var(--gold);color:var(--gold);background:rgba(245,166,35,.06);
+}
+.btn-ghost.national{border-color:#22c55e;color:#22c55e}
+.btn-ghost.national:hover,.btn-ghost.national.active{background:rgba(34,197,94,.08)}
+.btn-ghost.multi{border-color:#60a5fa;color:#60a5fa}
+.btn-ghost.multi:hover,.btn-ghost.multi.active{background:rgba(96,165,250,.08)}
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+main{display:flex;flex:1;overflow:hidden;min-height:0}
+
+/* ── Map area ────────────────────────────────────────────────────────────── */
+.map-area{
+  flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;
+}
+.map-bar{
+  padding:10px 20px;display:flex;align-items:center;gap:12px;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  flex-shrink:0;flex-wrap:wrap;
+}
+.map-bar-hint{font-size:.78rem;color:var(--muted)}
+.legend{display:flex;align-items:center;gap:6px;margin-left:auto;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:.72rem;color:var(--muted)}
+.legend-swatch{width:13px;height:13px;border-radius:2px;flex-shrink:0}
+.map-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:14px;overflow:hidden}
+#us-map{width:100%;max-width:900px;height:auto;display:block;overflow:visible}
+.state-path{cursor:pointer;transition:opacity .1s,stroke .1s}
+.state-path:hover{opacity:.8}
+.state-path.selected{stroke:var(--gold)!important;stroke-width:2.5!important}
+
+/* Club pins */
+.club-pin{
+  fill:var(--gold);fill-opacity:.85;stroke:#0a1628;stroke-width:1;
+  cursor:pointer;transition:fill-opacity .1s,r .1s;
+}
+.club-pin:hover{fill-opacity:1;r:6}
+
+/* ── Tooltip ─────────────────────────────────────────────────────────────── */
+#tooltip{
+  position:fixed;background:rgba(10,22,40,.95);border:1px solid var(--border);
+  border-radius:6px;padding:8px 12px;font-size:.78rem;pointer-events:none;
+  display:none;z-index:999;white-space:nowrap;
+}
+#tooltip strong{color:#fff;display:block;margin-bottom:2px}
+#tooltip span{color:var(--muted)}
+
+/* ── Side panel ──────────────────────────────────────────────────────────── */
+.panel{
+  width:var(--panel-w);background:var(--surface);
+  border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+  transform:translateX(var(--panel-w));
+  transition:transform .22s ease;
+  overflow:hidden;flex-shrink:0;
+}
+.panel.open{transform:translateX(0)}
+.panel-header{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.panel-header h2{font-size:1rem;font-weight:700;flex:1;min-width:0}
+.panel-close{
+  background:none;border:none;color:var(--muted);font-size:1.2rem;
+  cursor:pointer;padding:2px 6px;border-radius:4px;flex-shrink:0;
+}
+.panel-close:hover{color:#fff;background:var(--border)}
+.panel-body{flex:1;overflow-y:auto;padding:14px}
+.panel-footer{
+  border-top:1px solid var(--border);padding:8px 18px;
+  font-size:.68rem;color:var(--muted);line-height:1.5;flex-shrink:0;
+}
+
+/* ── Stat tiles ──────────────────────────────────────────────────────────── */
+.stat-row{display:flex;gap:8px;margin-bottom:10px}
+.stat-tile{
+  flex:1;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:10px 14px;min-width:0;
+}
+.stat-tile .big{font-size:1.6rem;font-weight:800;line-height:1.1}
+.stat-tile .label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
+.stat-tile.gold .big{color:var(--gold)}
+.stat-tile.green .big{color:#4ade80}
+.stat-tile.blue .big{color:#60a5fa}
+
+/* ── Section headers ─────────────────────────────────────────────────────── */
+.section-label{
+  font-size:.69rem;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.08em;margin:14px 0 7px;
+}
+.section-label:first-child{margin-top:0}
+
+/* ── League card ─────────────────────────────────────────────────────────── */
+.league-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:12px;margin-bottom:8px;
+}
+.league-card .lc-name{font-weight:600;font-size:.88rem;margin-bottom:5px;line-height:1.3}
+.badge{
+  display:inline-block;padding:1px 7px;border-radius:10px;
+  font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+}
+.badge-fp{background:#1e3a1e;color:#4ade80}
+.badge-np{background:#1e2a3a;color:#60a5fa}
+.badge-girls{background:#3a1e3a;color:#e879f9}
+.badge-coed{background:#2a1e10;color:var(--gold)}
+.badge-national{background:#1a3050;color:#93c5fd}
+.badge-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.meta-row{
+  font-size:.73rem;color:var(--muted);display:flex;flex-wrap:wrap;
+  gap:3px 10px;margin-top:4px;
+}
+.meta-row a{color:var(--gold);text-decoration:none}
+.meta-row a:hover{text-decoration:underline}
+.rev-line{font-size:.73rem;color:#4ade80;margin-top:5px;line-height:1.4}
+.rev-note{color:var(--muted);font-weight:400}
+.discovery-note{
+  font-size:.68rem;color:var(--muted);font-style:italic;
+  margin-top:4px;padding:3px 6px;background:rgba(255,255,255,.03);
+  border-radius:4px;border-left:2px solid var(--border);
+}
+
+/* ── Club card ───────────────────────────────────────────────────────────── */
+.club-card{
+  background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.25);
+  border-radius:8px;padding:11px 12px;margin-bottom:8px;
+}
+.club-card .cc-name{font-weight:600;font-size:.85rem;margin-bottom:4px;color:#fff}
+.club-card .cc-meta{font-size:.72rem;color:var(--muted)}
+.club-parent{
+  margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.07);
+  font-size:.69rem;color:var(--muted);
+}
+.club-parent strong{color:var(--text);font-size:.72rem}
+
+/* ── Full-panel overlay (national / multi-state) ─────────────────────────── */
+.overlay-panel{
+  position:fixed;inset:0;background:rgba(5,10,22,.88);z-index:500;
+  display:none;align-items:flex-start;justify-content:center;overflow-y:auto;
+  padding:30px 16px;
+}
+.overlay-panel.visible{display:flex}
+.overlay-box{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  width:100%;max-width:780px;overflow:hidden;flex-shrink:0;
+}
+.overlay-box-header{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+}
+.overlay-box-header h2{font-size:1.05rem;font-weight:700;flex:1}
+.overlay-body{padding:20px;max-height:70vh;overflow-y:auto}
+.ov-close{
+  background:none;border:none;color:var(--muted);font-size:1.3rem;
+  cursor:pointer;padding:2px 7px;border-radius:4px;
+}
+.ov-close:hover{color:#fff;background:var(--border)}
+
+/* ── Misc ────────────────────────────────────────────────────────────────── */
+.no-content{padding:30px 16px;text-align:center;color:var(--muted)}
+.no-content .icon{font-size:2.2rem;margin-bottom:10px}
+.load-error{color:#f87171;padding:20px;text-align:center;font-size:.85rem}
+.na{color:var(--muted);font-style:italic}

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2M Athletics — US Flag Football Investment Map</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="header-brand">2M Athletics · Flag Football</div>
+    <div class="header-sub">Youth League &amp; Club Investment Map</div>
+  </div>
+  <div class="header-actions">
+    <button class="btn-ghost national" id="btn-national">
+      🏈 National Operators <span class="count">–</span>
+    </button>
+    <button class="btn-ghost multi" id="btn-multi">
+      🗺 Multi-State Operators <span class="count">–</span>
+    </button>
+    <a class="btn-ghost" href="../index.html">← Drill-Down View</a>
+  </div>
+</header>
+
+<div id="tooltip"><strong id="tt-state"></strong><span id="tt-count"></span></div>
+
+<!-- National operators overlay -->
+<div class="overlay-panel" id="overlay-national">
+  <div class="overlay-box">
+    <div class="overlay-box-header">
+      <h2>🏈 National Operators</h2>
+      <button class="ov-close" id="ov-nat-close">✕</button>
+    </div>
+    <div class="overlay-body" id="overlay-national-body"></div>
+    <div style="padding:10px 20px;border-top:1px solid var(--border);font-size:.68rem;color:var(--muted)">
+      Revenue figures are modelled estimates from CSV revenue notes, not audited financials.
+    </div>
+  </div>
+</div>
+
+<!-- Multi-state overlay -->
+<div class="overlay-panel" id="overlay-multi">
+  <div class="overlay-box">
+    <div class="overlay-box-header">
+      <h2>🗺 Multi-State Operators</h2>
+      <button class="ov-close" id="ov-multi-close">✕</button>
+    </div>
+    <div class="overlay-body" id="overlay-multi-body"></div>
+    <div style="padding:10px 20px;border-top:1px solid var(--border);font-size:.68rem;color:var(--muted)">
+      Revenue figures are modelled estimates from CSV revenue notes, not audited financials.
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="map-area">
+    <div class="map-bar">
+      <span class="map-bar-hint">Click a state to explore leagues and clubs</span>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background:var(--c0)"></div>0</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:var(--c1)"></div>1–2</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:var(--c2)"></div>3–5</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:var(--c3)"></div>6–9</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:var(--c4)"></div>10+</div>
+        <div class="legend-item" style="margin-left:8px">
+          <div class="legend-swatch" style="background:var(--gold);border-radius:50%"></div>Club
+        </div>
+      </div>
+    </div>
+
+    <div class="map-wrap">
+      <div id="map-loading" style="width:100%;max-width:900px;text-align:center;color:var(--muted);padding:40px">
+        Loading data…
+      </div>
+      <svg id="us-map" viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg"
+           style="display:none;width:100%;max-width:900px;height:auto;overflow:visible">
+      </svg>
+    </div>
+  </div>
+
+  <!-- Right-side detail panel -->
+  <div class="panel" id="panel">
+    <div class="panel-header">
+      <h2 id="panel-title">Select a State</h2>
+      <button class="panel-close" id="panel-close">✕</button>
+    </div>
+    <div class="panel-body" id="panel-body">
+      <div class="no-content">
+        <div class="icon">🗺️</div>
+        <p>Click any state to explore leagues and discovered clubs.</p>
+      </div>
+    </div>
+    <div class="panel-footer">
+      Revenue figures are modelled estimates derived from the CSV's Revenue_Notes column, not audited financials.
+      Club entries reflect only publicly discoverable locations found by the pipeline.
+    </div>
+  </div>
+</main>
+
+<script src="app.js"></script>
+<script>
+  // Show SVG once data loads (app.js sets display:block after render)
+  const _origRender = window.renderMap;
+  document.addEventListener('DOMContentLoaded', () => {
+    // app.js loadData() calls renderMap() → show svg
+    const obs = new MutationObserver(() => {
+      const mapEl = document.getElementById('us-map');
+      if (mapEl && mapEl.children.length > 0) {
+        document.getElementById('map-loading').style.display = 'none';
+        mapEl.style.display = 'block';
+        obs.disconnect();
+      }
+    });
+    obs.observe(document.getElementById('us-map'), { childList: true });
+  });
+</script>
+</body>
+</html>
