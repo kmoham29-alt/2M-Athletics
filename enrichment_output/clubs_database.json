@@ -1,0 +1,337 @@
+{
+  "generated_at": "2026-07-23T14:03:56.292577+00:00",
+  "disclaimer": "AUTO-COLLECTED — REQUIRES HUMAN CONFIRMATION. Revenue figures marked 'modelled' are estimates from the original CSV, NOT verified. 990 revenue figures are from IRS filings via ProPublica and reflect total organization revenue for the filing period, not flag football program revenue alone.",
+  "record_count": 5,
+  "records": [
+    {
+      "org_id": "i9-sports",
+      "name": "i9 Sports",
+      "league_affiliation": null,
+      "business_type": {
+        "value": null,
+        "source_url": null,
+        "_csv_value": "FOR-PROFIT"
+      },
+      "ein": {
+        "value": null,
+        "source_url": null
+      },
+      "revenue_990": {
+        "value": null,
+        "filing_year": null,
+        "filing_type": null,
+        "source_url": null
+      },
+      "revenue_estimate_modelled": {
+        "value": 150000000,
+        "note": "from original CSV Revenue_Notes column, NOT verified. Franchise fees ($50-77K/unit) x 250 locations + ~$120/player registration; 5M total multi-sport registrations"
+      },
+      "head_name": {
+        "value": null,
+        "source_url": null
+      },
+      "head_title": {
+        "value": null,
+        "source_url": null
+      },
+      "email": {
+        "value": null,
+        "source_url": null
+      },
+      "phone": {
+        "value": null,
+        "source_url": null
+      },
+      "instagram": {
+        "value": null,
+        "source_url": null
+      },
+      "facebook": {
+        "value": null,
+        "source_url": null
+      },
+      "website": "https://www.i9sports.com",
+      "state": "National",
+      "primary_state": "National",
+      "city": "Nationwide (250+ franchise locations)",
+      "founded": "2003",
+      "players_participants": "5000000+ total registrations (all sports)",
+      "gender": "Co-ed",
+      "instagram_handle_csv": "@i9sports",
+      "instagram_followers_csv": 18500,
+      "facebook_page_csv": "i9 Sports",
+      "facebook_followers_csv": 45000,
+      "head_name_csv": "Brian Sanders",
+      "head_title_csv": "CEO",
+      "email_csv": "info@i9sports.com",
+      "phone_csv": "813-287-8370",
+      "confidence": "unverified",
+      "verification_status": "auto-collected — requires human confirmation",
+      "_nonprofit_error": null
+    },
+    {
+      "org_id": "unrivaled-sports-unrivaled-flag",
+      "name": "Unrivaled Sports / Unrivaled Flag",
+      "league_affiliation": null,
+      "business_type": {
+        "value": null,
+        "source_url": null,
+        "_csv_value": "FOR-PROFIT"
+      },
+      "ein": {
+        "value": null,
+        "source_url": null
+      },
+      "revenue_990": {
+        "value": null,
+        "filing_year": null,
+        "filing_type": null,
+        "source_url": null
+      },
+      "revenue_estimate_modelled": {
+        "value": 45000000,
+        "note": "from original CSV Revenue_Notes column, NOT verified. 170+ local leagues + Disney World Championships (1000 teams) + Under Armour + DICK'S Sporting Goods investment"
+      },
+      "head_name": {
+        "value": null,
+        "source_url": null
+      },
+      "head_title": {
+        "value": null,
+        "source_url": null
+      },
+      "email": {
+        "value": null,
+        "source_url": null
+      },
+      "phone": {
+        "value": null,
+        "source_url": null
+      },
+      "instagram": {
+        "value": null,
+        "source_url": null
+      },
+      "facebook": {
+        "value": null,
+        "source_url": null
+      },
+      "website": "https://unrivaledflag.com",
+      "state": "National",
+      "primary_state": "National",
+      "city": "Nationwide (27+ states)",
+      "founded": "2024 (flag div.)",
+      "players_participants": "45000+ (Under the Lights alone)",
+      "gender": "Co-ed",
+      "instagram_handle_csv": "@unrivaledsports",
+      "instagram_followers_csv": 12000,
+      "facebook_page_csv": "Unrivaled Sports",
+      "facebook_followers_csv": 8500,
+      "head_name_csv": "Josh Harris / David Blitzer",
+      "head_title_csv": "Co-Owners",
+      "email_csv": "info@unrivaledsports.com",
+      "phone_csv": null,
+      "confidence": "unverified",
+      "verification_status": "auto-collected — requires human confirmation",
+      "_nonprofit_error": null
+    },
+    {
+      "org_id": "under-the-lights-flag-football-unrivaled",
+      "name": "Under the Lights Flag Football (Unrivaled)",
+      "league_affiliation": null,
+      "business_type": {
+        "value": null,
+        "source_url": null,
+        "_csv_value": "FOR-PROFIT"
+      },
+      "ein": {
+        "value": null,
+        "source_url": null
+      },
+      "revenue_990": {
+        "value": null,
+        "filing_year": null,
+        "filing_type": null,
+        "source_url": null
+      },
+      "revenue_estimate_modelled": {
+        "value": 12000000,
+        "note": "from original CSV Revenue_Notes column, NOT verified. ~$40 net per athlete x 35000 players + tournament fees + Under Armour presenting sponsor"
+      },
+      "head_name": {
+        "value": null,
+        "source_url": null
+      },
+      "head_title": {
+        "value": null,
+        "source_url": null
+      },
+      "email": {
+        "value": null,
+        "source_url": null
+      },
+      "phone": {
+        "value": null,
+        "source_url": null
+      },
+      "instagram": {
+        "value": null,
+        "source_url": null
+      },
+      "facebook": {
+        "value": null,
+        "source_url": null
+      },
+      "website": "https://www.uaflag.com",
+      "state": "National",
+      "primary_state": "National",
+      "city": "27 states",
+      "founded": "2015",
+      "players_participants": "35000+",
+      "gender": "Co-ed",
+      "instagram_handle_csv": "@underthelightsflag",
+      "instagram_followers_csv": 8796,
+      "facebook_page_csv": "Under the Lights Flag Football",
+      "facebook_followers_csv": null,
+      "head_name_csv": "Matt Raab",
+      "head_title_csv": "Executive Director",
+      "email_csv": "info@uaflag.com",
+      "phone_csv": null,
+      "confidence": "unverified",
+      "verification_status": "auto-collected — requires human confirmation",
+      "_nonprofit_error": null
+    },
+    {
+      "org_id": "football-n-america-fna-drew-brees",
+      "name": "Football N America / FNA (Drew Brees)",
+      "league_affiliation": null,
+      "business_type": {
+        "value": null,
+        "source_url": null,
+        "_csv_value": "FOR-PROFIT"
+      },
+      "ein": {
+        "value": null,
+        "source_url": null
+      },
+      "revenue_990": {
+        "value": null,
+        "filing_year": null,
+        "filing_type": null,
+        "source_url": null
+      },
+      "revenue_estimate_modelled": {
+        "value": 3500000,
+        "note": "from original CSV Revenue_Notes column, NOT verified. 24 leagues x avg 200 players x $75 registration; acquired by Unrivaled Sports Oct 2025"
+      },
+      "head_name": {
+        "value": null,
+        "source_url": null
+      },
+      "head_title": {
+        "value": null,
+        "source_url": null
+      },
+      "email": {
+        "value": null,
+        "source_url": null
+      },
+      "phone": {
+        "value": null,
+        "source_url": null
+      },
+      "instagram": {
+        "value": null,
+        "source_url": null
+      },
+      "facebook": {
+        "value": null,
+        "source_url": null
+      },
+      "website": "https://playfna.com",
+      "state": "CA/LA/TX",
+      "primary_state": "CA",
+      "city": "California + Louisiana + Texas",
+      "founded": "2017",
+      "players_participants": null,
+      "gender": "Co-ed",
+      "instagram_handle_csv": "@footballnamerica",
+      "instagram_followers_csv": 4200,
+      "facebook_page_csv": "Football N America",
+      "facebook_followers_csv": 3100,
+      "head_name_csv": "Drew Brees / Chris Stuart",
+      "head_title_csv": "Co-Founders",
+      "email_csv": "info@playfna.com",
+      "phone_csv": null,
+      "confidence": "unverified",
+      "verification_status": "auto-collected — requires human confirmation",
+      "_nonprofit_error": null
+    },
+    {
+      "org_id": "next-level-flag-football",
+      "name": "Next Level Flag Football",
+      "league_affiliation": null,
+      "business_type": {
+        "value": null,
+        "source_url": null,
+        "_csv_value": "FOR-PROFIT"
+      },
+      "ein": {
+        "value": null,
+        "source_url": null
+      },
+      "revenue_990": {
+        "value": null,
+        "filing_year": null,
+        "filing_type": null,
+        "source_url": null
+      },
+      "revenue_estimate_modelled": {
+        "value": 8000000,
+        "note": "from original CSV Revenue_Notes column, NOT verified. 100+ locations x avg 300 players x ~$100 registration + camp revenue; 15th official season 2027"
+      },
+      "head_name": {
+        "value": null,
+        "source_url": null
+      },
+      "head_title": {
+        "value": null,
+        "source_url": null
+      },
+      "email": {
+        "value": null,
+        "source_url": null
+      },
+      "phone": {
+        "value": null,
+        "source_url": null
+      },
+      "instagram": {
+        "value": null,
+        "source_url": null
+      },
+      "facebook": {
+        "value": null,
+        "source_url": null
+      },
+      "website": "https://www.nextlevelsports.com",
+      "state": "15 states",
+      "primary_state": null,
+      "city": "Bay Area CA + 14 states (100+ locations)",
+      "founded": "2010",
+      "players_participants": null,
+      "gender": "Co-ed",
+      "instagram_handle_csv": "@nextlevelrecsports",
+      "instagram_followers_csv": 363,
+      "facebook_page_csv": "Next Level Sports",
+      "facebook_followers_csv": null,
+      "head_name_csv": null,
+      "head_title_csv": "Director",
+      "email_csv": null,
+      "phone_csv": null,
+      "confidence": "unverified",
+      "verification_status": "auto-collected — requires human confirmation",
+      "_nonprofit_error": null
+    }
+  ]
+}
